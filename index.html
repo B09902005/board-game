@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>桌遊線上化測試</title>
+    <style>
+        .container {
+            display: flex;
+        }
+    
+        #gameboard {
+            width: 800px;
+            height: 960px;
+            border: 2px solid black;
+            position: relative;
+        }
+
+        .tile {
+            width: 38px;
+            height: 38px;
+            float: left;
+            background-size: cover;
+            border: 1px solid black;
+        }
+    
+        .tile.nothing {background-color: #FFFFFF;}
+        .tile.normal {background-color: #FFFF99;}
+        .tile.place {background-color: #FF8888;}
+        .tile.ques {background-color: #EEAA55;}
+        .tile.star {background-color: #C0FFEE;}
+        .tile.money {background-color: #99FF99;}
+        .tile.example {background-image: url("a.png");}
+        
+        .player-status {
+            width: 400px;
+            height: 960px;
+            padding: 10px;
+            margin-left: 50px;
+        }
+    
+        .player-status > div {
+            width: 400px;
+            height: 200px;
+            border: 2px solid black;
+            color: #333333;
+            box-sizing: border-box;
+            margin-top: 10px; /* 添加彼此之間的間隙 */
+            margin-bottom: 20px; /* 添加彼此之間的間隙 */
+            border-radius: 30px;
+            font-family: Arial, sans-serif;
+        }
+
+        .money-icon, .defense-icon, .dice-icon, .buff-icon {
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            background-color: #999999;
+            border-radius: 50%;
+            margin-right: 5px;
+            margin-left: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>桌遊線上化測試</h1>
+
+    <div class="container">
+    <div id="gameboard">
+        <div class="tile star"></div>
+        <div class="tile normal"></div>
+        <div class="tile normal"></div>
+        <div class="tile ques"></div>
+        <div class="tile money"></div>
+        <div class="tile normal"></div>
+        <div class="tile ques"></div>
+        <div class="tile money"></div>
+        <div class="tile star"></div>
+        <div class="tile normal"></div>
+        <div class="tile normal"></div>
+        <div class="tile normal"></div>
+        <div class="tile normal"></div>
+        <div class="tile normal"></div>
+        <div class="tile money"></div>
+        <div class="tile normal"></div>
+        <div class="tile normal"></div>
+        <div class="tile normal"></div>
+        <div class="tile ques"></div>
+        <div class="tile normal"></div>
+        
+        <div class="tile ques"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile ques"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile normal"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile money"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile star"></div>
+        
+        <div class="tile normal"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile ques"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile money"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile place"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile star"></div>
+        
+        <div class="tile money"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile ques"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile normal"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile normal"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile place"></div>
+        
+        <div class="tile normal"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile ques"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile normal"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile star"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        
+        <div class="tile ques"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile ques"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile star"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile place"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        
+        <div class="tile money"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile ques"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile place"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile normal"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        
+        <div class="tile normal"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile ques"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile normal"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile ques"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        
+        <div class="tile normal"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile ques"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile money"></div>
+        <div class="tile nothing"></div>
+        <div class="tile normal"></div>
+        <div class="tile star"></div>
+        <div class="tile normal"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        
+        <div class="tile normal"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile place"></div>
+        <div class="tile normal"></div>
+        <div class="tile nothing"></div>
+        <div class="tile normal"></div>
+        <div class="tile normal"></div>
+        <div class="tile ques"></div>
+        <div class="tile money"></div>
+        <div class="tile nothing"></div>
+        <div class="tile money"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        
+        <div class="tile ques"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile ques"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile normal"></div>
+        <div class="tile nothing"></div>
+        <div class="tile normal"></div>
+        <div class="tile star"></div>
+        <div class="tile normal"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        
+        <div class="tile normal"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile ques"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile star"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile money"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        
+        <div class="tile normal"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile place"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile normal"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile normal"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        
+        <div class="tile star"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile money"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile ques"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        
+        <div class="tile normal"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile normal"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile normal"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile star"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        
+        <div class="tile money"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile normal"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile ques"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile normal"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        
+        <div class="tile ques"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile ques"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile normal"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile money"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        
+        <div class="tile normal"></div>
+        <div class="tile ques"></div>
+        <div class="tile normal"></div>
+        <div class="tile star"></div>
+        <div class="tile normal"></div>
+        <div class="tile normal"></div>
+        <div class="tile normal"></div>
+        <div class="tile ques"></div>
+        <div class="tile normal"></div>
+        <div class="tile normal"></div>
+        <div class="tile normal"></div>
+        <div class="tile normal"></div>
+        <div class="tile ques"></div>
+        <div class="tile money"></div>
+        <div class="tile ques"></div>
+        <div class="tile normal"></div>
+        <div class="tile ques"></div>
+        <div class="tile normal"></div>
+        <div class="tile money"></div>
+        <div class="tile nothing"></div>
+        
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile normal"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile normal"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile star"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile star"></div>
+        <div class="tile nothing"></div>
+        
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile place"></div>
+        <div class="tile money"></div>
+        <div class="tile normal"></div>
+        <div class="tile ques"></div>
+        <div class="tile normal"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile star"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile normal"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile normal"></div>
+        <div class="tile nothing"></div>
+        
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile star"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile normal"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile money"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile money"></div>
+        <div class="tile nothing"></div>
+        
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile normal"></div>
+        <div class="tile money"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile ques"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile ques"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile star"></div>
+        <div class="tile nothing"></div>
+        
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile place"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile normal"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile normal"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile nothing"></div>
+        <div class="tile star"></div>
+        <div class="tile nothing"></div>
+        
+        <div class="tile place"></div>
+        <div class="tile normal"></div>
+        <div class="tile star"></div>
+        <div class="tile place"></div>
+        <div class="tile money"></div>
+        <div class="tile normal"></div>
+        <div class="tile normal"></div>
+        <div class="tile ques"></div>
+        <div class="tile normal"></div>
+        <div class="tile star"></div>
+        <div class="tile place"></div>
+        <div class="tile ques"></div>
+        <div class="tile normal"></div>
+        <div class="tile normal"></div>
+        <div class="tile normal"></div>
+        <div class="tile star"></div>
+        <div class="tile money"></div>
+        <div class="tile ques"></div>
+        <div class="tile normal"></div>
+        <div class="tile nothing"></div>
+    </div>
+    
+    <div class="player-status">
+            <b><font size=5px>玩家一資料</font></b>
+            <div>
+                <br>
+                <span class="money-icon"></span>
+                <font color="blue">金錢：</font>$100<br>
+                <span class="defense-icon"></span>
+                <font color="blue">嫁禍無效卡：</font>3張<br>
+                <span class="dice-icon"></span>
+                <font color="blue">控骰卡：</font>骰2<br>
+                <span class="buff-icon"></span>
+                <font color="blue">永久效果：</font><br>
+                效果一<br>效果二</div>
+            <b><font size=5px>玩家二資料</font></b>
+            <div>
+                <br>
+                <span class="money-icon"></span>
+                <font color="blue">金錢：</font>$100<br>
+                <span class="defense-icon"></span>
+                <font color="blue">嫁禍無效卡：</font>3張<br>
+                <span class="dice-icon"></span>
+                <font color="blue">控骰卡：</font>骰2<br>
+                <span class="buff-icon"></span>
+                <font color="blue">永久效果：</font><br>
+                效果一<br>效果二</div>
+            <b><font size=5px>玩家三資料</font></b>
+            <div>
+                <br>
+                <span class="money-icon"></span>
+                <font color="blue">金錢：</font>$100<br>
+                <span class="defense-icon"></span>
+                <font color="blue">嫁禍無效卡：</font>3張<br>
+                <span class="dice-icon"></span>
+                <font color="blue">控骰卡：</font>骰2<br>
+                <span class="buff-icon"></span>
+                <font color="blue">永久效果：</font><br>
+                效果一<br>效果二</div>
+            <b><font size=5px>玩家四資料</font></b>
+            <div>
+                <br>
+                <span class="money-icon"></span>
+                <font color="blue">金錢：</font>$100<br>
+                <span class="defense-icon"></span>
+                <font color="blue">嫁禍無效卡：</font>3張<br>
+                <span class="dice-icon"></span>
+                <font color="blue">控骰卡：</font>骰2<br>
+                <span class="buff-icon"></span>
+                <font color="blue">永久效果：</font><br>
+                效果一<br>效果二</div>
+    </div>
+    </div>
+
+</body>
+</html>
+
