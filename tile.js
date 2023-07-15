@@ -20,29 +20,33 @@ function add_board_text(){
     }
 }
 
+function get_player_data(data){
+    var ans = '<center> <b> <font size=5px>' + data.name + '資料 </font> </b> </center> <br>';
+    
+    ans += '<span class="icons money"> </span>' + '<font color="blue"> 金錢： </font>$' + data.money + '<br>';
+    ans += '<span class="icons shield"> </span>' + '<font color="blue"> 嫁禍無效卡： </font> ' + data.shield + '張<br>';
+    ans += '<span class="icons dice"> </span>' + '<font color="blue"> 控骰卡： </font>';
+    if (data.dice.length == 0) ans += '無';
+    for (var j = 0; j < data.dice.length; j++) {
+        if (j != 0) ans += '、';
+        ans += '骰' + data.dice[j] + '  ';
+    }
+    ans += '<br> <span class="icons buff"> </span>' + '<font color="blue"> 永久效果：</font>';
+    if (data.buff.length == 0) ans += '無';
+    for (var j = 0; j < data.buff.length; j++) {
+        ans += '<br> <div style="line-height: 16px; text-indent: 2em">' + data.buff[j] + '</div>';
+    }
+    return ans;
+}
+
 // 建立玩家資料
 function add_player_data(){
     var player_data = document.getElementById("player_data");
     for (var i = 0; i < playerData.length; i++) {
         var player = document.createElement("div");
         player.className = "player_status";
-        player.innerHTML = '<center> <b> <font size=5px>' + playerData[i].name + '資料 </font> </b> </center> <br>';
-        
-        player.innerHTML += '<span class="icons money"> </span>' + '<font color="blue"> 金錢： </font>$' + playerData[i].money + '<br>';
-        player.innerHTML += '<span class="icons shield"> </span>' + '<font color="blue"> 嫁禍無效卡： </font> ' + playerData[i].shield + '張<br>';
-        player.innerHTML += '<span class="icons dice"> </span>' + '<font color="blue"> 控骰卡： </font>';
-        if (playerData[i].dice.length == 0) player.innerHTML += '無';
-        for (var j = 0; j < playerData[i].dice.length; j++) {
-            if (j != 0) player.innerHTML += '、';
-            player.innerHTML += '骰' + playerData[i].dice[j] + '  ';
-        }
-        player.innerHTML += '<br> <span class="icons buff"> </span>' + '<font color="blue"> 永久效果：</font>';
-        if (playerData[i].buff.length == 0) player.innerHTML += '無';
-        for (var j = 0; j < playerData[i].buff.length; j++) {
-            player.innerHTML += '<br> <div style="line-height: 16px; text-indent: 2em">' + playerData[i].buff[j] + '</div>';
-        }
-        
-        
+        player.id = playerData[i].name;
+        player.innerHTML = get_player_data(playerData[i]);
         player_data.appendChild(player);
     }
 }
@@ -62,7 +66,7 @@ var placeData = [
     { margin_left: 710, margin_top: 770, text: "銀行" },
     { margin_left: 80, margin_top: 370, text: "商業區" },
     { margin_left: 110, margin_top: 40, text: "古蹟" },
-    { margin_left: 310, margin_top: 370, text: "勝利之路" },
+    { margin_left: 350, margin_top: 370, text: "廣場" },
     { margin_left: 350, margin_top: 490, text: "終點" },
     { margin_left: 510, margin_top: 250, text: "公園" },
     { margin_left: 720, margin_top: 210, text: "醫院" },
