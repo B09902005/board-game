@@ -1,94 +1,161 @@
+// 建立遊戲版上的各個格子
+function add_tiles(){
+    var gameboard = document.getElementById("gameboard");
+    for (var i = 0; i < tileData.length; i++) {
+        var tile = document.createElement("div");
+        tile.className = tileData[i].class;
+        gameboard.appendChild(tile);
+    }
+}
+
+// 建立各大地點的附加文字
+function add_board_text(){
+    for (var i = 0; i < placeData.length; i++) {
+        var text = document.createElement("div");
+        text.className = "place_text";
+        text.style.marginLeft = placeData[i].margin_left + 'px';
+        text.style.marginTop = placeData[i].margin_top + 'px';
+        text.textContent = placeData[i].text;
+        document.body.appendChild(text);
+    }
+}
+
+// 建立玩家資料
+function add_player_data(){
+    var player_data = document.getElementById("player_data");
+    for (var i = 0; i < playerData.length; i++) {
+        var player = document.createElement("div");
+        player.className = "player_status";
+        player.innerHTML = '<center> <b> <font size=5px>' + playerData[i].name + '資料 </font> </b> </center> <br>';
+        
+        player.innerHTML += '<span class="icons money"> </span>' + '<font color="blue"> 金錢： </font>$' + playerData[i].money + '<br>';
+        player.innerHTML += '<span class="icons shield"> </span>' + '<font color="blue"> 嫁禍無效卡： </font> ' + playerData[i].shield + '張<br>';
+        player.innerHTML += '<span class="icons dice"> </span>' + '<font color="blue"> 控骰卡： </font>';
+        if (playerData[i].dice.length == 0) player.innerHTML += '無';
+        for (var j = 0; j < playerData[i].dice.length; j++) {
+            if (j != 0) player.innerHTML += '、';
+            player.innerHTML += '骰' + playerData[i].dice[j] + '  ';
+        }
+        player.innerHTML += '<br> <span class="icons buff"> </span>' + '<font color="blue"> 永久效果：</font>';
+        if (playerData[i].buff.length == 0) player.innerHTML += '無';
+        for (var j = 0; j < playerData[i].buff.length; j++) {
+            player.innerHTML += '<br> <div style="line-height: 16px; text-indent: 2em">' + playerData[i].buff[j] + '</div>';
+        }
+        
+        
+        player_data.appendChild(player);
+    }
+}
+
+
+var playerData = [
+    { name: "玩家一", money: 0, shield: 0, dice: [2,3], buff:[], x: 0, y: 0 },
+    { name: "玩家二", money: 10, shield: 1, dice: [10], buff:["效果五","效果六"], x: 0, y: 0 },
+    { name: "玩家三", money: 20, shield: 2, dice: [], buff:["效果一","效果二","效果三"], x: 0, y: 0 },
+    { name: "玩家四", money: 30, shield: 4, dice: [], buff:["效果四"], x: 0, y: 0 },
+]
+var placeData = [
+    { margin_left: 40, margin_top: 890, text: "起點" },
+    { margin_left: 200, margin_top: 890, text: "博物館" },
+    { margin_left: 40, margin_top: 770, text: "動物園" },
+    { margin_left: 440, margin_top: 890, text: "警察局" },
+    { margin_left: 710, margin_top: 770, text: "銀行" },
+    { margin_left: 80, margin_top: 370, text: "商業區" },
+    { margin_left: 110, margin_top: 40, text: "古蹟" },
+    { margin_left: 310, margin_top: 370, text: "勝利之路" },
+    { margin_left: 350, margin_top: 490, text: "終點" },
+    { margin_left: 510, margin_top: 250, text: "公園" },
+    { margin_left: 720, margin_top: 210, text: "醫院" },
+    { margin_left: 750, margin_top: 40, text: "寺廟" },
+    { margin_left: 310, margin_top: 40, text: "車站" }
+]
 var tileData = [
     { class: "tile star" },
     { class: "tile normal" },
-    { class: "tile normal" },
-    { class: "tile ques" },
-    { class: "tile money" },
-    { class: "tile normal" },
-    { class: "tile ques" },
-    { class: "tile money" },
-    { class: "tile star" },
-    { class: "tile normal" },
-    { class: "tile normal" },
-    { class: "tile normal" },
-    { class: "tile normal" },
-    { class: "tile normal" },
-    { class: "tile money" },
-    { class: "tile normal" },
-    { class: "tile normal" },
-    { class: "tile normal" },
-    { class: "tile ques" },
-    { class: "tile normal" },
-    
-    { class: "tile ques" },
-    { class: "tile nothing" },
-    { class: "tile nothing" },
-    { class: "tile nothing" },
-    { class: "tile nothing" },
-    { class: "tile nothing" },
-    { class: "tile nothing" },
-    { class: "tile nothing" },
-    { class: "tile nothing" },
-    { class: "tile ques" },
-    { class: "tile nothing" },
-    { class: "tile nothing" },
-    { class: "tile nothing" },
-    { class: "tile normal" },
-    { class: "tile nothing" },
-    { class: "tile nothing" },
-    { class: "tile money" },
-    { class: "tile nothing" },
-    { class: "tile nothing" },
-    { class: "tile star" },
-    
-    { class: "tile normal" },
-    { class: "tile nothing" },
-    { class: "tile nothing" },
-    { class: "tile nothing" },
-    { class: "tile nothing" },
-    { class: "tile nothing" },
-    { class: "tile nothing" },
-    { class: "tile nothing" },
-    { class: "tile nothing" },
-    { class: "tile ques" },
-    { class: "tile nothing" },
-    { class: "tile nothing" },
-    { class: "tile nothing" },
-    { class: "tile money" },
-    { class: "tile nothing" },
-    { class: "tile nothing" },
     { class: "tile place" },
-    { class: "tile nothing" },
-    { class: "tile nothing" },
-    { class: "tile star" },
-    
-    { class: "tile money" },
-    { class: "tile nothing" },
-    { class: "tile nothing" },
-    { class: "tile nothing" },
-    { class: "tile nothing" },
-    { class: "tile nothing" },
-    { class: "tile nothing" },
-    { class: "tile nothing" },
-    { class: "tile nothing" },
     { class: "tile ques" },
-    { class: "tile nothing" },
-    { class: "tile nothing" },
-    { class: "tile nothing" },
+    { class: "tile money" },
     { class: "tile normal" },
-    { class: "tile nothing" },
-    { class: "tile nothing" },
+    { class: "tile ques" },
+    { class: "tile place" },
+    { class: "tile money" },
+    { class: "tile star" },
     { class: "tile normal" },
-    { class: "tile nothing" },
-    { class: "tile nothing" },
+    { class: "tile ques" },
+    { class: "tile normal" },
+    { class: "tile normal" },
+    { class: "tile money" },
+    { class: "tile normal" },
+    { class: "tile normal" },
+    { class: "tile ques" },
     { class: "tile place" },
     
+    { class: "tile ques" },
+    { class: "tile nothing" },
+    { class: "tile nothing" },
+    { class: "tile nothing" },
+    { class: "tile nothing" },
+    { class: "tile nothing" },
+    { class: "tile nothing" },
+    { class: "tile nothing" },
+    { class: "tile nothing" },
+    { class: "tile ques" },
+    { class: "tile nothing" },
+    { class: "tile nothing" },
+    { class: "tile nothing" },
+    { class: "tile ques" },
+    { class: "tile nothing" },
+    { class: "tile nothing" },
+    { class: "tile money" },
+    { class: "tile nothing" },
+    { class: "tile nothing" },
+    
     { class: "tile normal" },
     { class: "tile nothing" },
     { class: "tile nothing" },
     { class: "tile nothing" },
     { class: "tile nothing" },
     { class: "tile nothing" },
+    { class: "tile nothing" },
+    { class: "tile nothing" },
+    { class: "tile nothing" },
+    { class: "tile ques" },
+    { class: "tile nothing" },
+    { class: "tile nothing" },
+    { class: "tile nothing" },
+    { class: "tile money" },
+    { class: "tile nothing" },
+    { class: "tile nothing" },
+    { class: "tile normal" },
+    { class: "tile nothing" },
+    { class: "tile nothing" },
+    
+    { class: "tile money" },
+    { class: "tile normal" },
+    { class: "tile star" },
+    { class: "tile money" },
+    { class: "tile star" },
+    { class: "tile ques" },
+    { class: "tile nothing" },
+    { class: "tile nothing" },
+    { class: "tile normal" },
+    { class: "tile ques" },
+    { class: "tile nothing" },
+    { class: "tile nothing" },
+    { class: "tile nothing" },
+    { class: "tile normal" },
+    { class: "tile nothing" },
+    { class: "tile nothing" },
+    { class: "tile normal" },
+    { class: "tile nothing" },
+    { class: "tile nothing" },
+    
+    { class: "tile normal" },
+    { class: "tile nothing" },
+    { class: "tile nothing" },
+    { class: "tile nothing" },
+    { class: "tile nothing" },
+    { class: "tile normal" },
     { class: "tile nothing" },
     { class: "tile nothing" },
     { class: "tile nothing" },
@@ -102,14 +169,13 @@ var tileData = [
     { class: "tile star" },
     { class: "tile nothing" },
     { class: "tile nothing" },
-    { class: "tile nothing" },
     
     { class: "tile ques" },
     { class: "tile nothing" },
     { class: "tile nothing" },
     { class: "tile nothing" },
     { class: "tile nothing" },
-    { class: "tile nothing" },
+    { class: "tile money" },
     { class: "tile nothing" },
     { class: "tile nothing" },
     { class: "tile nothing" },
@@ -123,14 +189,13 @@ var tileData = [
     { class: "tile place" },
     { class: "tile nothing" },
     { class: "tile nothing" },
-    { class: "tile nothing" },
     
     { class: "tile money" },
     { class: "tile nothing" },
     { class: "tile nothing" },
     { class: "tile nothing" },
     { class: "tile nothing" },
-    { class: "tile nothing" },
+    { class: "tile star" },
     { class: "tile nothing" },
     { class: "tile nothing" },
     { class: "tile nothing" },
@@ -144,14 +209,13 @@ var tileData = [
     { class: "tile normal" },
     { class: "tile nothing" },
     { class: "tile nothing" },
-    { class: "tile nothing" },
     
     { class: "tile normal" },
-    { class: "tile nothing" },
-    { class: "tile nothing" },
-    { class: "tile nothing" },
-    { class: "tile nothing" },
-    { class: "tile nothing" },
+    { class: "tile ques" },
+    { class: "tile money" },
+    { class: "tile normal" },
+    { class: "tile money" },
+    { class: "tile star" },
     { class: "tile nothing" },
     { class: "tile nothing" },
     { class: "tile nothing" },
@@ -163,7 +227,6 @@ var tileData = [
     { class: "tile nothing" },
     { class: "tile nothing" },
     { class: "tile ques" },
-    { class: "tile nothing" },
     { class: "tile nothing" },
     { class: "tile nothing" },
     
@@ -186,9 +249,8 @@ var tileData = [
     { class: "tile star" },
     { class: "tile normal" },
     { class: "tile nothing" },
-    { class: "tile nothing" },
     
-    { class: "tile normal" },
+    { class: "tile place" },
     { class: "tile nothing" },
     { class: "tile nothing" },
     { class: "tile nothing" },
@@ -200,13 +262,12 @@ var tileData = [
     { class: "tile place" },
     { class: "tile normal" },
     { class: "tile nothing" },
-    { class: "tile normal" },
-    { class: "tile normal" },
+    { class: "tile nothing" },
     { class: "tile ques" },
+    { class: "tile normal" },
     { class: "tile money" },
     { class: "tile nothing" },
     { class: "tile money" },
-    { class: "tile nothing" },
     { class: "tile nothing" },
     
     { class: "tile ques" },
@@ -228,9 +289,8 @@ var tileData = [
     { class: "tile star" },
     { class: "tile normal" },
     { class: "tile nothing" },
-    { class: "tile nothing" },
     
-    { class: "tile normal" },
+    { class: "tile money" },
     { class: "tile nothing" },
     { class: "tile nothing" },
     { class: "tile nothing" },
@@ -247,7 +307,6 @@ var tileData = [
     { class: "tile nothing" },
     { class: "tile nothing" },
     { class: "tile money" },
-    { class: "tile nothing" },
     { class: "tile nothing" },
     { class: "tile nothing" },
     
@@ -270,7 +329,6 @@ var tileData = [
     { class: "tile normal" },
     { class: "tile nothing" },
     { class: "tile nothing" },
-    { class: "tile nothing" },
     
     { class: "tile star" },
     { class: "tile nothing" },
@@ -291,7 +349,6 @@ var tileData = [
     { class: "tile ques" },
     { class: "tile nothing" },
     { class: "tile nothing" },
-    { class: "tile nothing" },
     
     { class: "tile normal" },
     { class: "tile nothing" },
@@ -302,7 +359,7 @@ var tileData = [
     { class: "tile nothing" },
     { class: "tile nothing" },
     { class: "tile nothing" },
-    { class: "tile normal" },
+    { class: "tile nothing" },
     { class: "tile nothing" },
     { class: "tile nothing" },
     { class: "tile nothing" },
@@ -312,7 +369,6 @@ var tileData = [
     { class: "tile star" },
     { class: "tile nothing" },
     { class: "tile nothing" },
-    { class: "tile nothing" },
     
     { class: "tile money" },
     { class: "tile nothing" },
@@ -323,7 +379,7 @@ var tileData = [
     { class: "tile nothing" },
     { class: "tile nothing" },
     { class: "tile nothing" },
-    { class: "tile normal" },
+    { class: "tile nothing" },
     { class: "tile nothing" },
     { class: "tile nothing" },
     { class: "tile nothing" },
@@ -331,7 +387,6 @@ var tileData = [
     { class: "tile nothing" },
     { class: "tile nothing" },
     { class: "tile normal" },
-    { class: "tile nothing" },
     { class: "tile nothing" },
     { class: "tile nothing" },
     
@@ -344,7 +399,7 @@ var tileData = [
     { class: "tile nothing" },
     { class: "tile nothing" },
     { class: "tile nothing" },
-    { class: "tile ques" },
+    { class: "tile nothing" },
     { class: "tile nothing" },
     { class: "tile nothing" },
     { class: "tile nothing" },
@@ -352,7 +407,6 @@ var tileData = [
     { class: "tile nothing" },
     { class: "tile nothing" },
     { class: "tile money" },
-    { class: "tile nothing" },
     { class: "tile nothing" },
     { class: "tile nothing" },
     
@@ -361,7 +415,7 @@ var tileData = [
     { class: "tile normal" },
     { class: "tile star" },
     { class: "tile normal" },
-    { class: "tile normal" },
+    { class: "tile money" },
     { class: "tile normal" },
     { class: "tile ques" },
     { class: "tile normal" },
@@ -375,7 +429,6 @@ var tileData = [
     { class: "tile ques" },
     { class: "tile normal" },
     { class: "tile money" },
-    { class: "tile nothing" },
     
     { class: "tile nothing" },
     { class: "tile nothing" },
@@ -396,7 +449,6 @@ var tileData = [
     { class: "tile nothing" },
     { class: "tile nothing" },
     { class: "tile star" },
-    { class: "tile nothing" },
     
     { class: "tile nothing" },
     { class: "tile nothing" },
@@ -416,8 +468,7 @@ var tileData = [
     { class: "tile nothing" },
     { class: "tile nothing" },
     { class: "tile nothing" },
-    { class: "tile normal" },
-    { class: "tile nothing" },
+    { class: "tile place" },
     
     { class: "tile nothing" },
     { class: "tile nothing" },
@@ -438,7 +489,6 @@ var tileData = [
     { class: "tile nothing" },
     { class: "tile nothing" },
     { class: "tile money" },
-    { class: "tile nothing" },
     
     { class: "tile nothing" },
     { class: "tile nothing" },
@@ -459,7 +509,6 @@ var tileData = [
     { class: "tile nothing" },
     { class: "tile nothing" },
     { class: "tile star" },
-    { class: "tile nothing" },
     
     { class: "tile nothing" },
     { class: "tile nothing" },
@@ -480,12 +529,11 @@ var tileData = [
     { class: "tile nothing" },
     { class: "tile nothing" },
     { class: "tile star" },
-    { class: "tile nothing" },
     
     { class: "tile place" },
     { class: "tile normal" },
     { class: "tile star" },
-    { class: "tile place" },
+    { class: "tile ques" },
     { class: "tile money" },
     { class: "tile normal" },
     { class: "tile normal" },
@@ -500,6 +548,5 @@ var tileData = [
     { class: "tile star" },
     { class: "tile money" },
     { class: "tile ques" },
-    { class: "tile normal" },
-    { class: "tile nothing" }
+    { class: "tile normal" }
 ];

@@ -7,80 +7,28 @@
 </head>
 <body>
     <h1>桌遊線上化測試</h1>
-
-    <div class="container">
-        <div class="gameboard" id="gameboard">
-            <script src = "tile.js"></script>
-            <script>
-                var gameboard = document.getElementById("gameboard");
-
-                for (var i = 0; i < tileData.length; i++) {
-                    var tile = document.createElement("div");
-                    tile.className = tileData[i].class;
-                    gameboard.appendChild(tile);
-                }
-            </script>
-        </div>
     
-        <div class="player-status">
-            <b><font size=5px>玩家一資料</font></b>
-            <div>
-                <br>
-                <span class="icons money"></span>
-                <font color="blue">金錢：</font>$100<br>
-                <span class="icons shield"></span>
-                <font color="blue">嫁禍無效卡：</font>3張<br>
-                <span class="icons dice"></span>
-                <font color="blue">控骰卡：</font>骰2<br>
-                <span class="icons buff"></span>
-                <font color="blue">永久效果：</font><br>
-                效果一<br>效果二
-            </div>
-            <b><font size=5px>玩家二資料</font></b>
-            <div>
-                <br>
-                <span class="icons money"></span>
-                <font color="blue">金錢：</font>$100<br>
-                <span class="icons shield"></span>
-                <font color="blue">嫁禍無效卡：</font>3張<br>
-                <span class="icons dice"></span>
-                <font color="blue">控骰卡：</font>骰2<br>
-                <span class="icons buff"></span>
-                <font color="blue">永久效果：</font><br>
-                效果一<br>效果二
-            </div>
-            <b><font size=5px>玩家三資料</font></b>
-            <div>
-                <br>
-                <span class="icons money"></span>
-                <font color="blue">金錢：</font>$100<br>
-                <span class="icons shield"></span>
-                <font color="blue">嫁禍無效卡：</font>3張<br>
-                <span class="icons dice"></span>
-                <font color="blue">控骰卡：</font>骰2<br>
-                <span class="icons buff"></span>
-                <font color="blue">永久效果：</font><br>
-                效果一<br>效果二
-            </div>
-            <b><font size=5px>玩家四資料</font></b>
-            <div>
-                <br>
-                <span class="icons money"></span>
-                <font color="blue">金錢：</font>$100<br>
-                <span class="icons shield"></span>
-                <font color="blue">嫁禍無效卡：</font>3張<br>
-                <span class="icons dice"></span>
-                <font color="blue">控骰卡：</font>骰2<br>
-                <span class="icons buff"></span>
-                <font color="blue">永久效果：</font><br>
-                效果一<br>效果二
-            </div>
-        </div>
+    <div class="gameboard" id="gameboard">
+        <script src = "tile.js"></script>
+        <script> add_tiles() </script>
+        <script> add_board_text() </script>
     </div>
     
-    <button onclick="restart()"> 重新一局遊戲 </button>
+    <button onclick="rule()" class="rule"> 查看遊戲規則 </button>
+    <button onclick="restart()" class="restart"> 重新一局遊戲 </button>
+        
+    <div class="big_dice"> </div>
+    <button onclick="roll()" class="roll"> 擲骰 </button>
+    <div class="card"> </div>
+            
+    <div class="player_data", id="player_data">
+        <script> add_player_data() </script>
+    </div>
     <script src = "main.js"></script>
 
 </body>
 </html>
 
+<!-- TODO: 玩家資料弄好，然後弄「重新開始鍵」初始化 -->
+<!-- TODO: 遊戲規則 -->
+<!-- TODO: 骰骰子動畫 -->
