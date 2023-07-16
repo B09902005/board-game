@@ -48,15 +48,24 @@ function add_player_data(){
         player.id = playerData[i].name;
         player.innerHTML = get_player_data(playerData[i]);
         player_data.appendChild(player);
+        
+        var player_icon = document.createElement("img");
+        player_icon.className = "player_icon";
+        player_icon.id = playerData[i].name + "_icon";
+        player_icon.style.marginLeft = 40 * playerData[i].x + i % 2 * 10 + 30 + "px";
+        player_icon.style.marginTop = 40 * playerData[i].y + Math.floor(i/2) * 10 + "px";
+        player_icon.src = "images/player/" + (i+1) + ".png";
+        document.body.appendChild(player_icon);
+                                                                        
     }
 }
 
 
 var playerData = [
     { name: "玩家一", money: 0, shield: 0, dice: [2,3], buff:[], x: 0, y: 0 },
-    { name: "玩家二", money: 10, shield: 1, dice: [10], buff:["效果五","效果六"], x: 0, y: 0 },
-    { name: "玩家三", money: 20, shield: 2, dice: [], buff:["效果一","效果二","效果三"], x: 0, y: 0 },
-    { name: "玩家四", money: 30, shield: 4, dice: [], buff:["效果四"], x: 0, y: 0 },
+    { name: "玩家二", money: 10, shield: 1, dice: [10], buff:["效果五","效果六"], x: 7, y: 0 },
+    { name: "玩家三", money: 20, shield: 2, dice: [], buff:["效果一","效果二","效果三"], x: 9, y: 12 },
+    { name: "玩家四", money: 30, shield: 4, dice: [], buff:["效果四"], x: 0, y: 23 },
 ]
 var placeData = [
     { margin_left: 40, margin_top: 890, text: "起點" },
