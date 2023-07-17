@@ -61,14 +61,112 @@ function add_player_data(){
                                                                         
     }
 }
-
-
+                                                                        
+function init(){
+    playerData = [
+        { name: "玩家一", id: 0, money: 0, shield: 0, dice: [], buff:[], x: 0, y: 23 },
+        { name: "玩家二", id: 1, money: 0, shield: 0, dice: [], buff:[], x: 0, y: 23 },
+        { name: "玩家三", id: 2, money: 0, shield: 0, dice: [], buff:[], x: 0, y: 23 },
+        { name: "玩家四", id: 3, money: 0, shield: 0, dice: [], buff:[], x: 0, y: 23 }
+    ];
+    quesData = [
+                {money: 30, description: "前往起點"},
+                {money: 30, description: "前往起點"},
+                {money: 30, description: "前往博物館"},
+                {money: 30, description: "前往動物園"},
+                {money: 30, description: "前往警察局"},
+                {money: 30, description: "前往銀行"},
+                {money: 30, description: "前往銀行"},
+                {money: 20, description: "前往商業區"},
+                {money: 20, description: "前往公園"},
+                {money: 20, description: "前往醫院"},
+                {money: 20, description: "前往寺廟"},
+                {money: 10, description: "前往古蹟"},
+                {money: 10, description: "前往車站"},
+                {money: 10, description: "前往廣場"},
+                {money: 10, description: "前往廣場"},
+                {money: 100, description: "獲得50元"},
+                {money: 100, description: "獲得100元"},
+                {money: 100, description: "獲得100元"},
+                {money: 100, description: "獲得200元"},
+                {money: 20, description: "失去50元"},
+                {money: 50, description: "失去100元"},
+                {money: 100, description: "失去所有錢"},
+                {money: 100, description: "失去所有道具卡（嫁禍無效卡+控骰卡+永久效果卡）"},
+                {money: 50, description: "失去所有控骰卡"},
+                {money: 50, description: "失去所有永久效果卡"},
+                {money: 10, description: "與離終點最近的玩家交換位置"},
+                {money: 10, description: "與最有錢的玩家交換金錢數量"},
+                {money: 10, description: "與最多道具卡（嫁禍無效卡+控骰卡+永久效果卡）的玩家交換所有道具卡"},
+                {money: 100, description: "獲得兩張道具卡"},
+                {money: 100, description: "獲得兩張道具卡"}
+            ];
+    starData = [
+                {type: "shield", description:""},
+                {type: "shield", description:""},
+                {type: "shield", description:""},
+                {type: "shield", description:""},
+                {type: "shield", description:""},
+                {type: "shield", description:""},
+                {type: "shield", description:""},
+                {type: "shield", description:""},
+                {type: "shield", description:""},
+                {type: "shield", description:""},
+                {type: "dice", description:1},
+                {type: "dice", description:1},
+                {type: "dice", description:2},
+                {type: "dice", description:2},
+                {type: "dice", description:3},
+                {type: "dice", description:3},
+                {type: "dice", description:4},
+                {type: "dice", description:4},
+                {type: "dice", description:5},
+                {type: "dice", description:5},
+                {type: "dice", description:6},
+                {type: "dice", description:6},
+                {type: "dice", description:1},
+                {type: "dice", description:2},
+                {type: "dice", description:3},
+                {type: "dice", description:4},
+                {type: "dice", description:5},
+                {type: "dice", description:6},
+                {type: "dice", description:10},
+                {type: "dice", description:10},
+                {type: "buff", description:"可以免費將？卡嫁禍於人"},
+                {type: "buff", description:"他人無法用嫁禍無效卡來抵擋你的嫁禍"},
+                {type: "buff", description:"永久性嫁禍無效卡"},
+                {type: "buff", description:"到達星星格時，可一次抽兩張道具卡"},
+                {type: "buff", description:"每回合結束後獲得10元"},
+                {type:
+        "buff", description:"金錢的收入加倍"},
+                {type: "buff", description:"每回移動步數+3 (控骰卡除外)"},
+                {type: "buff", description:"每次被有效嫁禍時，可抽一張道具卡"},
+                {type: "buff", description:"與他人踩在同一格時，可搶走他所有金錢"},
+                {type: "buff", description:"使用傳送門的所需費用折半"}
+            ]
+    for (var i=quesData.length-1 ; i>0 ; i--){
+        var temp = Math.floor(Math.random() * (i + 1));
+        [quesData[i], quesData[temp]] = [quesData[temp], quesData[i]];
+    }
+    while (quesData.length != 2) quesData.shift();
+    quesData.push(0);
+    for (var i=starData.length-1 ; i>0 ; i--){
+        var temp = Math.floor(Math.random() * (i + 1));
+        [starData[i], starData[temp]] = [starData[temp], starData[i]];
+    }
+    console.log(quesData);
+    console.log(starData);
+}
+                                                                        
 var playerData = [
-    { name: "玩家一", money: 0, shield: 0, dice: [2,3], buff:[], x: 0, y: 0 },
-    { name: "玩家二", money: 10, shield: 1, dice: [10], buff:["效果五","效果六"], x: 7, y: 0 },
-    { name: "玩家三", money: 20, shield: 2, dice: [], buff:["效果一","效果二","效果三"], x: 9, y: 12 },
-    { name: "玩家四", money: 30, shield: 4, dice: [], buff:["效果四"], x: 0, y: 23 },
-]
+    { name: "玩家一", id: 0, money: 0, shield: 0, dice: [], buff:[], x: 0, y: 23 },
+    { name: "玩家二", id: 1, money: 0, shield: 0, dice: [], buff:[], x: 0, y: 23 },
+    { name: "玩家三", id: 2, money: 0, shield: 0, dice: [], buff:[], x: 0, y: 23 },
+    { name: "玩家四", id: 3, money: 0, shield: 0, dice: [], buff:[], x: 0, y: 23 }
+];
+var quesData = [];
+var starData = [];
+                                       
 var placeData = [
     { margin_left: 40, margin_top: 890, text: "起點" },
     { margin_left: 200, margin_top: 890, text: "博物館" },

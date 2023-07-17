@@ -18,21 +18,18 @@ async function roll(){
     return num;
 }
 
+function output_player(player){
+    var p = document.getElementById(player.name);
+    p.innerHTML = get_player_data(player);
+    var player_icon = document.getElementById(player.name + "_icon");
+    player_icon.style.marginLeft = 40 * player.x + player.id % 2 * 10 + 30 + "px";
+    player_icon.style.marginTop = 40 * player.y + Math.floor(player.id/2) * 10 + "px";
+}
+
 function start_game(){
-    playerData = [
-    { name: "玩家一", id:0, money: 0, shield: 0, dice: [], buff:[], x: 0, y: 23 },
-    { name: "玩家二", id:1, money: 0, shield: 0, dice: [], buff:[], x: 0, y: 23 },
-    { name: "玩家三", id:2, money: 0, shield: 0, dice: [], buff:[], x: 0, y: 23 },
-    { name: "玩家四", id:3, money: 0, shield: 0, dice: [], buff:[], x: 0, y: 23 },
-]
+    init();
     console.log("重新開始");
-    for (var i = 0; i < playerData.length; i++) {
-        var player = document.getElementById(playerData[i].name);
-        player.innerHTML = get_player_data(playerData[i]);
-        var player_icon = document.getElementById(playerData[i].name + "_icon");
-        player_icon.style.marginLeft = 40 * playerData[i].x + i % 2 * 10 + 30 + "px";
-        player_icon.style.marginTop = 40 * playerData[i].y + Math.floor(i/2) * 10 + "px";
-    }
+    for (var i = 0; i < playerData.length; i++) output_player(playerData[i]);
     main();
 }
 

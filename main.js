@@ -17,8 +17,38 @@ function find_all_paths(player, num){
     return paths;
 }
 
+function get_buff(player){
+    var card = document.getElementById("card");
+    if (tileData[player.y][player.x].class == "tile money"){
+        player.money += 30;
+        card.innerHTML = '<br>' + player.name + '獲得30元';
+    }
+    if (tileData[player.y][player.x].class == "tile star"){
+        var star = starData.shift();
+        if (star.type == "shield"){
+            player.shield += 1;
+            card.innerHTML = '<br>' + player.name + '獲得嫁禍無效卡';
+        }
+        if (star.type == "dice"){
+            player.dice.push(star.description);
+            card.innerHTML = '<br>' + player.name + '獲得控骰卡：骰' + star.description;
+        }
+        if (star.type == "buff"){
+            player.buff.push(star.description);
+            card.innerHTML = '<br>' + player.name + '獲得永久效果卡：' + star.description;
+        }
+        console.log(starData);
+    }
+    if (tileData[player.y][player.x].class == "tile ques"){
+        var ques = quesData[quesData[quesData.length-1]];
+        card.innerHTML = '<br>' + '？卡效果：' + ques.description;
+        quesData[quesData.length-1] = (quesData[quesData.length-1] + 1) % (quesData.length-1);
+        console.log(quesData);
+    }
+    output_player(player);
+}
+
 async function moveAI(player){
-    console.log(player);
     var diceNumber = await roll();
     var card = document.getElementById("card");
     card.innerHTML = '<br>' + player.name + '骰出了 ' + diceNumber;
@@ -26,12 +56,15 @@ async function moveAI(player){
     await sleep(1000);
     var paths = find_all_paths(player, diceNumber);
     var path = paths[Math.floor(Math.random()*paths.length)]
-    console.log(paths, path);
-    player.x = path[diceNumber].x;
-    player.y = path[diceNumber].y;
-    var player_icon = document.getElementById(player.name + "_icon");
-    player_icon.style.marginLeft = 40 * player.x + player.id % 2 * 10 + 30 + "px";
-    player_icon.style.marginTop = 40 * player.y + Math.floor(player.id/2) * 10 + "px";
+    console.log(path[0].x, path[0].y, 'to', path[diceNumber].x, path[diceNumber].y);
+    for (var i=1 ; i<=diceNumber ; i++){
+        player.x = path[i].x;
+        player.y = path[i].y;
+        output_player(player);
+        await sleep(500);
+    }
+    await sleep(1000);
+    get_buff(player);
 }
 
 async function main(){
@@ -42,6 +75,5 @@ async function main(){
             await sleep(1000);
             if ((playerData[i].x == 9) && (playerData[i].y == 12)) break;
         }
-        //break;
     }
 }
