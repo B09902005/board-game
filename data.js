@@ -70,36 +70,36 @@ function init(){
         { name: "玩家四", id: 3, money: 0, shield: 0, dice: [], buff:[], x: 0, y: 23 }
     ];
     quesData = [
-                {money: 30, description: "前往起點"},
-                {money: 30, description: "前往起點"},
-                {money: 30, description: "前往博物館"},
-                {money: 30, description: "前往動物園"},
-                {money: 30, description: "前往警察局"},
-                {money: 30, description: "前往銀行"},
-                {money: 30, description: "前往銀行"},
-                {money: 20, description: "前往商業區"},
-                {money: 20, description: "前往公園"},
-                {money: 20, description: "前往醫院"},
-                {money: 20, description: "前往寺廟"},
-                {money: 10, description: "前往古蹟"},
-                {money: 10, description: "前往車站"},
-                {money: 10, description: "前往廣場"},
-                {money: 10, description: "前往廣場"},
-                {money: 100, description: "獲得50元"},
-                {money: 100, description: "獲得100元"},
-                {money: 100, description: "獲得100元"},
-                {money: 100, description: "獲得200元"},
-                {money: 20, description: "失去50元"},
-                {money: 50, description: "失去100元"},
-                {money: 100, description: "失去所有錢"},
-                {money: 100, description: "失去所有道具卡（嫁禍無效卡+控骰卡+永久效果卡）"},
-                {money: 50, description: "失去所有控骰卡"},
-                {money: 50, description: "失去所有永久效果卡"},
-                {money: 10, description: "與離終點最近的玩家交換位置"},
-                {money: 10, description: "與最有錢的玩家交換金錢數量"},
-                {money: 10, description: "與最多道具卡（嫁禍無效卡+控骰卡+永久效果卡）的玩家交換所有道具卡"},
-                {money: 100, description: "獲得兩張道具卡"},
-                {money: 100, description: "獲得兩張道具卡"}
+                {id:0, money: 30, description: "前往起點"},
+                {id:1, money: 30, description: "前往起點"},
+                {id:2, money: 30, description: "前往博物館"},
+                {id:3, money: 30, description: "前往動物園"},
+                {id:4, money: 30, description: "前往警察局"},
+                {id:5, money: 30, description: "前往銀行"},
+                {id:6, money: 30, description: "前往銀行"},
+                {id:7, money: 20, description: "前往商業區"},
+                {id:8, money: 20, description: "前往公園"},
+                {id:9, money: 20, description: "前往醫院"},
+                {id:10, money: 20, description: "前往寺廟"},
+                {id:11, money: 10, description: "前往古蹟"},
+                {id:12, money: 10, description: "前往車站"},
+                {id:13, money: 10, description: "前往廣場"},
+                {id:14, money: 10, description: "前往廣場"},
+                {id:15, money: 100, description: "獲得50元"},
+                {id:16, money: 100, description: "獲得100元"},
+                {id:17, money: 100, description: "獲得100元"},
+                {id:18, money: 100, description: "獲得200元"},
+                {id:19, money: 20, description: "失去50元"},
+                {id:20, money: 50, description: "失去100元"},
+                {id:21, money: 100, description: "失去所有錢"},
+                {id:22, money: 100, description: "失去所有道具卡（嫁禍無效卡+控骰卡+永久效果卡）"},
+                {id:23, money: 50, description: "失去所有控骰卡"},
+                {id:24, money: 50, description: "失去所有永久效果卡"},
+                {id:25, money: 10, description: "與離終點最近的對手交換位置"},
+                {id:26, money: 10, description: "與最有錢的對手交換金錢數量"},
+                {id:27, money: 10, description: "與最多道具卡（嫁禍無效卡+控骰卡+永久效果卡）的對手交換所有道具卡"},
+                {id:28, money: 100, description: "獲得兩張道具卡"},
+                {id:29, money: 100, description: "獲得兩張道具卡"}
             ];
     starData = [
                 {type: "shield", description:""},
@@ -148,7 +148,6 @@ function init(){
         var temp = Math.floor(Math.random() * (i + 1));
         [quesData[i], quesData[temp]] = [quesData[temp], quesData[i]];
     }
-    while (quesData.length != 2) quesData.shift();
     quesData.push(0);
     for (var i=starData.length-1 ; i>0 ; i--){
         var temp = Math.floor(Math.random() * (i + 1));
