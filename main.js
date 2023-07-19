@@ -48,6 +48,7 @@ function distance_to_terminal(x, y){
 }
 
 async function use_ques(ques, player){
+    if (player == null) return;
     if (ques.id < 15){
         var src = {x:player.x, y:player.y};
         var dest = {x:0, y:23};
@@ -80,11 +81,22 @@ async function use_ques(ques, player){
     if (ques.id == 19) player.money -= 50;
     if (ques.id == 20) player.money -= 100;
     if (ques.id == 21) player.money = 0;
-    if (ques.id == 22) player.shield = 0;
-    if (ques.id == 22) player.dice = [];
-    if (ques.id == 22) player.buff = [];
-    if (ques.id == 23) player.dice = [];
-    if (ques.id == 24) player.buff = [];
+    if (ques.id == 22){
+        for (var i=0 ; i<player.shield ; i++) starData.push({type: "shield", description:""});
+        for (var i=0 ; i<player.dice.length ; i++) starData.push(player.dice[i]);
+        for (var i=0 ; i<player.buff.length ; i++) starData.push(player.buff[i]);
+        player.shield = 0;
+        player.dice = [];
+        player.buff = [];
+    }
+    if (ques.id == 23){
+        for (var i=0 ; i<player.dice.length ; i++) starData.push(player.dice[i]);
+        player.dice = [];
+    }
+    if (ques.id == 24){
+        for (var i=0 ; i<player.buff.length ; i++) starData.push(player.buff[i]);
+        player.buff = [];
+    }
     if (ques.id == 25){
         var tempid = (player.id+1)%4;
         for (var i=0 ; i<4 ; i++){
@@ -152,6 +164,28 @@ async function use_ques(ques, player){
     if (player.money < 0) player.money = 0;
 }
 
+async function transfer(player, ques){
+    await sleep(1000);
+    var card = document.getElementById("card");
+    var player2 = playerData[(player.id+1)%4];
+    if (player.money < ques.money) player2 = player;
+    if (player2.name != player.name){
+        card.innerHTML += ('<br>' + player.name + '選擇嫁禍給' + player2.name);
+        console.log(player.name, '選擇嫁禍給', player2.name);
+        player.money -= ques.money;
+        await sleep(1000);
+        if (player2.shield != 0){
+            card.innerHTML += ('<br>' + player2.name + '使用嫁禍無效卡');
+            console.log(player.name, '使用嫁禍無效卡');
+            player2.shield -= 1;
+            starData.push({type: "shield", description:""});
+            return null;
+        }
+    }
+    await sleep(1000);
+    return player2;
+}
+
 async function get_buff(player){
     var card = document.getElementById("card");
     if (tileData[player.y][player.x].class == "tile money"){
@@ -182,19 +216,33 @@ async function get_buff(player){
     }
     if (tileData[player.y][player.x].class == "tile ques"){
         var ques = quesData[quesData[quesData.length-1]];
-        card.innerHTML = '<br>' + '？卡效果：' + ques.description;
+        card.innerHTML = '<br>' + '？卡效果：' + ques.description + '<br>' + '（嫁禍金額：' + ques.money + '）';
         console.log('？卡效果：' + ques.description);
         quesData[quesData.length-1] = (quesData[quesData.length-1] + 1) % (quesData.length-1);
-        await use_ques(ques, player);
+        var to_player = await transfer(player, ques);
+        await use_ques(ques, to_player);
     }
     output_player(player);
 }
 
+function pick_dice(player){
+    if (player.dice.length == 0) return null;
+    return player.dice.shift();
+}
+
 async function moveAI(player){
-    var diceNumber = await roll();
     var card = document.getElementById("card");
-    card.innerHTML = '<br>' + player.name + '骰出了 ' + diceNumber;
-    console.log(player.name + " rolled " + diceNumber);
+    var diceNumber = pick_dice(player);
+    if (diceNumber == null){
+        diceNumber = await roll();
+        card.innerHTML = '<br>' + player.name + '骰出了 ' + diceNumber;
+        console.log(player.name + '骰出了 ' + diceNumber);
+    }else{
+        await sleep(1000);
+        card.innerHTML = '<br>' + player.name + '使用控骰卡：骰' + diceNumber;
+        console.log(player.name + '使用控骰卡：骰' + diceNumber);
+        starData.push({type: "dice", description:diceNumber});
+    }
     await sleep(1000);
     var paths = find_all_paths(player, diceNumber);
     var path = paths[Math.floor(Math.random()*paths.length)]
@@ -207,6 +255,7 @@ async function moveAI(player){
     }
     await sleep(1000);
     await get_buff(player);
+    console.log(starData.length);
 }
 
 async function main(){

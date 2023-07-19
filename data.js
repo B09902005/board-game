@@ -36,7 +36,17 @@ function get_player_data(data){
     ans += '<br> <span class="icons buff"> </span>' + '<font color="blue"> 永久效果：</font>';
     if (data.buff.length == 0) ans += '無';
     for (var j = 0; j < data.buff.length; j++) {
-        ans += '<br> <div style="line-height: 16px; text-indent: 2em">' + data.buff[j] + '</div>';
+        if (j != 0) ans += '、';
+        if (data.buff[j] == '可以免費將？卡嫁禍於人') ans += '<span class="icons buff1" > </span>';
+        if (data.buff[j] == '他人無法用嫁禍無效卡來抵擋你的嫁禍') ans += '<span class="icons buff2" > </span>';
+        if (data.buff[j] == '無限量嫁禍無效卡') ans += '<span class="icons buff3" > </span>';
+        if (data.buff[j] == '到達星星格時，可一次抽兩張道具卡') ans += '<span class="icons buff4" > </span>';
+        if (data.buff[j] == '每回合結束後獲得10元') ans += '<span class="icons buff5" > </span>';
+        if (data.buff[j] == '金錢的收入加倍') ans += '<span class="icons buff6" > </span>';
+        if (data.buff[j] == '每回移動步數+3 (控骰卡除外)') ans += '<span class="icons buff7" > </span>';
+        if (data.buff[j] == '每次被有效嫁禍時，可抽一張道具卡') ans += '<span class="icons buff8" > </span>';
+        if (data.buff[j] == '踩在有其他人的格子時，可搶走他至多50元') ans += '<span class="icons buff9" > </span>';
+        if (data.buff[j] == '使用傳送門的所需費用折半') ans += '<span class="icons buff10" > </span>';
     }
     return ans;
 }
@@ -64,10 +74,10 @@ function add_player_data(){
                                                                         
 function init(){
     playerData = [
-        { name: "玩家一", id: 0, money: 0, shield: 0, dice: [], buff:[], x: 0, y: 23 },
-        { name: "玩家二", id: 1, money: 0, shield: 0, dice: [], buff:[], x: 0, y: 23 },
-        { name: "玩家三", id: 2, money: 0, shield: 0, dice: [], buff:[], x: 0, y: 23 },
-        { name: "玩家四", id: 3, money: 0, shield: 0, dice: [], buff:[], x: 0, y: 23 }
+        { name: "玩家一", id: 0, money: 0, shield: 0, dice: [3], buff:[], x: 0, y: 23 },
+        { name: "玩家二", id: 1, money: 0, shield: 0, dice: [3], buff:[], x: 0, y: 23 },
+        { name: "玩家三", id: 2, money: 0, shield: 0, dice: [3], buff:[], x: 0, y: 23 },
+        { name: "玩家四", id: 3, money: 0, shield: 0, dice: [3], buff:[], x: 0, y: 23 }
     ];
     quesData = [
                 {id:0, money: 30, description: "前往起點"},
@@ -92,12 +102,12 @@ function init(){
                 {id:19, money: 20, description: "失去50元"},
                 {id:20, money: 50, description: "失去100元"},
                 {id:21, money: 100, description: "失去所有錢"},
-                {id:22, money: 100, description: "失去所有道具卡（嫁禍無效卡+控骰卡+永久效果卡）"},
+                {id:22, money: 100, description: "失去所有道具卡"},
                 {id:23, money: 50, description: "失去所有控骰卡"},
                 {id:24, money: 50, description: "失去所有永久效果卡"},
                 {id:25, money: 10, description: "與離終點最近的對手交換位置"},
                 {id:26, money: 10, description: "與最有錢的對手交換金錢數量"},
-                {id:27, money: 10, description: "與最多道具卡（嫁禍無效卡+控骰卡+永久效果卡）的對手交換所有道具卡"},
+                {id:27, money: 10, description: "與最多道具卡的對手交換所有道具卡"},
                 {id:28, money: 100, description: "獲得兩張道具卡"},
                 {id:29, money: 100, description: "獲得兩張道具卡"}
             ];
@@ -134,14 +144,13 @@ function init(){
                 {type: "dice", description:10},
                 {type: "buff", description:"可以免費將？卡嫁禍於人"},
                 {type: "buff", description:"他人無法用嫁禍無效卡來抵擋你的嫁禍"},
-                {type: "buff", description:"永久性嫁禍無效卡"},
+                {type: "buff", description:"無限量嫁禍無效卡"},
                 {type: "buff", description:"到達星星格時，可一次抽兩張道具卡"},
                 {type: "buff", description:"每回合結束後獲得10元"},
-                {type:
-        "buff", description:"金錢的收入加倍"},
+                {type: "buff", description:"金錢的收入加倍"},
                 {type: "buff", description:"每回移動步數+3 (控骰卡除外)"},
                 {type: "buff", description:"每次被有效嫁禍時，可抽一張道具卡"},
-                {type: "buff", description:"與他人踩在同一格時，可搶走他所有金錢"},
+                {type: "buff", description:"踩在有其他人的格子時，可搶走他至多50元"},
                 {type: "buff", description:"使用傳送門的所需費用折半"}
             ]
     for (var i=quesData.length-1 ; i>0 ; i--){

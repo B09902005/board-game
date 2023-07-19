@@ -45,24 +45,34 @@ button{
 }
 .rule{
     background-color: #4CAF50;
-    margin-left: 900px;
+    margin-left: 850px;
     margin-top: 30px;
 }
 .restart{
     background-color: #CC4433;
-    margin-left: 1050px;
+    margin-left: 1000px;
     margin-top: 30px;
 }
 .roll{
     background-color: #ACAF50;
-    margin-left: 870px;
+    margin-left: 850px;
     margin-top: 420px;
-    width: 300px;
+    width: 270px;
+}
+.use_star{
+    background-color: #DD5544;
+    margin-left: 850px;
+    margin-top: 500px;
+}
+.door{
+    background-color: #DD5544;
+    margin-left: 1000px;
+    margin-top: 500px;
 }
 
 .big_dice {
     position: absolute;
-    margin-left: 870px;
+    margin-left: 830px;
     margin-top: 100px;
     width: 300px;
     height: 300px;
@@ -73,8 +83,8 @@ button{
     background-color: #CCCCCC;
     font-size: 20px;
     position: absolute;
-    margin-left: 870px;
-    margin-top: 500px;
+    margin-left: 850px;
+    margin-top: 580px;
     width: 300px;
     height: 300px;
     border: 2px solid black;
@@ -86,18 +96,18 @@ button{
 
 .player_data {
     position: absolute;
-    width: 1200px;
-    height: 700px;
-    margin-left: 0px;
-    margin-top: 1000px;
+    width: 300px;
+    height: 1000px;
+    margin-left: 1150px;
+    margin-top: 0px;
 }
 
 .player_status {
-    width: 500px;
-    height: 250px;
+    width: 250px;
+    height: 200px;
     border: 2px solid black;
     box-sizing: border-box;
-    margin-left: 50px;
+    margin-left: 20px;
     margin-top: 30px;
     border-radius: 30px;
     font-family: Arial, sans-serif;
@@ -113,6 +123,7 @@ button{
 
 
 .icons {
+    position: relative;
     display: inline-block;
     width: 20px;
     height: 20px;
@@ -125,4 +136,26 @@ button{
 .icons.shield {background-image: url("images/list/shield.png");}
 .icons.dice {background-image: url("images/list/dice.png");}
 .icons.buff {background-image: url("images/list/buff.png");}
+
+.icons.buff1 {background-image: url("images/buff/1.png");}
+.icons.buff2 {background-image: url("images/buff/2.png");}
+.icons.buff3 {background-image: url("images/buff/3.png");}
+.icons.buff4 {background-image: url("images/buff/4.png");}
+.icons.buff5 {background-image: url("images/buff/5.png");}
+.icons.buff6 {background-image: url("images/buff/6.png");}
+.icons.buff7 {background-image: url("images/buff/7.png");}
+.icons.buff8 {background-image: url("images/buff/8.png");}
+.icons.buff9 {background-image: url("images/buff/9.png");}
+.icons.buff10 {background-image: url("images/buff/10.png");}
+
+.icons.buff1:hover::before{position: absolute; content: '可以免費將？卡嫁禍於人'; top: 20px; left:-50px; width: 100px;}
+.icons.buff2:hover::before{position: absolute; content: '他人無法用嫁禍無效卡來抵擋你的嫁禍'; top: 20px; left:-50px; width: 100px;}
+.icons.buff3:hover::before{position: absolute; content: '無限量嫁禍無效卡'; top: 20px; left:-50px; width: 100px;}
+.icons.buff4:hover::before{position: absolute; content: '到達星星格時，可一次抽兩張道具卡'; top: 20px; left:-50px; width: 100px;}
+.icons.buff5:hover::before{position: absolute; content: '每回合結束後獲得10元'; top: 20px; left:-50px; width: 100px;}
+.icons.buff6:hover::before{position: absolute; content: '金錢的收入加倍'; top: 20px; left:-50px; width: 100px;}
+.icons.buff7:hover::before{position: absolute; content: '每回移動步數+3 (控骰卡除外)'; top: 20px; left:-50px; width: 100px;}
+.icons.buff8:hover::before{position: absolute; content: '每次被有效嫁禍時，可抽一張道具卡'; top: 20px; left:-50px; width: 100px;}
+.icons.buff9:hover::before{position: absolute; content: '踩在有其他人的格子時，可搶走他至多50元'; top: 20px; left:-50px; width: 100px;}
+.icons.buff10:hover::before{position: absolute; content: '使用傳送門的所需費用折半'; top: 20px;  left:-50px; width: 100px;}
 
