@@ -18,6 +18,19 @@ async function roll(){
     return num;
 }
 
+function openmodal(){
+    const modal = document.getElementById("myModal");
+    modal.style.display = "block";
+}
+
+window.addEventListener("click", (event) => {
+    const modal = document.getElementById("myModal");
+    const button = document.getElementById("door")
+    if (event.target != button){
+        modal.style.display = "none";
+    }
+});
+
 function output_player(player){
     var p = document.getElementById(player.name);
     p.innerHTML = get_player_data(player);
@@ -37,4 +50,23 @@ function restart(){
     var temp = confirm('確定要重新開始遊戲？本局的遊戲資料將不會保存。');
     if (temp) location.reload();
 }
-      
+
+async function transferto(place, money){
+    var player = playerData[0];
+    if (player.money < money){
+        alert("玩家金錢不足");
+        return;
+    }
+    var temp = confirm('確定要花費$' + money + '，在這回合移動到' + place + '？');
+    if (temp == true){
+        player.money -= money;
+        var card = document.getElementById("card");
+        card.innerHTML = ('<br>' + player.name + '使用傳送門移動至' + place);
+        console.log(player.name, '使用傳送門移動至', place);
+        var ques = {id:999, money: 0, description: ""};
+        if (place == '車站') ques.id = 12;
+        if (place == '廣場') ques.id = 14;
+        if (place == '終點') ques.id = -1;
+        use_ques(ques, player);
+    }
+}

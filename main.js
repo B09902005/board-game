@@ -1,3 +1,11 @@
+function have_buff(player, id){
+    for (var j=0 ; j<player.buff.length ; j++){
+        if (player.buff[j].type != "buff") continue;
+        if (player.buff[j].id == id) return true;
+    }
+    return false;
+}
+
 function find_all_paths(player, num){
     if (num == 0) return [[{x:player.x, y:player.y}]];
     var prev_paths = find_all_paths(player, num-1);
@@ -67,6 +75,7 @@ async function use_ques(ques, player){
         if (ques.id == 12) dest = {x:7, y:0};
         if (ques.id == 13) dest = {x:9, y:9};
         if (ques.id == 14) dest = {x:9, y:9};
+        if (ques.id == -1) dest = {x:9, y:12};
         for (var i=1 ; i<=100 ; i++){
             player.x = (i*dest.x + (100-i)*src.x) / 100;
             player.y = (i*dest.y + (100-i)*src.y) / 100;
@@ -83,14 +92,14 @@ async function use_ques(ques, player){
     if (ques.id == 21) player.money = 0;
     if (ques.id == 22){
         for (var i=0 ; i<player.shield ; i++) starData.push({type: "shield", description:""});
-        for (var i=0 ; i<player.dice.length ; i++) starData.push(player.dice[i]);
+        for (var i=0 ; i<player.dice.length ; i++) starData.push({type: "dice", description:player.dice[i]});
         for (var i=0 ; i<player.buff.length ; i++) starData.push(player.buff[i]);
         player.shield = 0;
         player.dice = [];
         player.buff = [];
     }
     if (ques.id == 23){
-        for (var i=0 ; i<player.dice.length ; i++) starData.push(player.dice[i]);
+        for (var i=0 ; i<player.dice.length ; i++) starData.push({type: "dice", description:player.dice[i]});
         player.dice = [];
     }
     if (ques.id == 24){
@@ -155,7 +164,7 @@ async function use_ques(ques, player){
                 console.log(player.name, '獲得控骰卡：骰', star.description);
             }
             if (star.type == "buff"){
-                player.buff.push(star.description);
+                player.buff.push(star);
                 card.innerHTML = '<br>' + player.name + '獲得永久效果卡：' + star.description;
                 console.log(player.name, '獲得永久效果卡：', star.description);
             }
@@ -176,7 +185,7 @@ async function transfer(player, ques){
         await sleep(1000);
         if (player2.shield != 0){
             card.innerHTML += ('<br>' + player2.name + '使用嫁禍無效卡');
-            console.log(player.name, '使用嫁禍無效卡');
+            console.log(player2.name, '使用嫁禍無效卡');
             player2.shield -= 1;
             starData.push({type: "shield", description:""});
             return null;
@@ -208,7 +217,7 @@ async function get_buff(player){
                 console.log(player.name, '獲得控骰卡：骰', star.description);
             }
             if (star.type == "buff"){
-                player.buff.push(star.description);
+                player.buff.push(star);
                 card.innerHTML = '<br>' + player.name + '獲得永久效果卡：' + star.description;
                 console.log(player.name, '獲得永久效果卡：', star.description);
             }

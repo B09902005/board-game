@@ -69,6 +69,25 @@ button{
     margin-left: 1000px;
     margin-top: 500px;
 }
+.btnOption{
+    width: 200px;
+    background-color: #DD5544;
+    margin-left: 30px;
+}
+.btnOption.one{margin-top: 30px;}
+.btnOption.two{margin-top: 100px;}
+.btnOption.three{margin-top: 170px;}
+
+.modal {
+    display: none;
+    position: absolute;
+    margin-left: 850px;
+    margin-top: 580px;
+    width: 300px;
+    height: 300px;
+    border: 2px solid black;
+    background-color: #FFFFFF;
+}
 
 .big_dice {
     position: absolute;

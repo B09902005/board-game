@@ -37,16 +37,16 @@ function get_player_data(data){
     if (data.buff.length == 0) ans += '無';
     for (var j = 0; j < data.buff.length; j++) {
         if (j != 0) ans += '、';
-        if (data.buff[j] == '可以免費將？卡嫁禍於人') ans += '<span class="icons buff1" > </span>';
-        if (data.buff[j] == '他人無法用嫁禍無效卡來抵擋你的嫁禍') ans += '<span class="icons buff2" > </span>';
-        if (data.buff[j] == '無限量嫁禍無效卡') ans += '<span class="icons buff3" > </span>';
-        if (data.buff[j] == '到達星星格時，可一次抽兩張道具卡') ans += '<span class="icons buff4" > </span>';
-        if (data.buff[j] == '每回合結束後獲得10元') ans += '<span class="icons buff5" > </span>';
-        if (data.buff[j] == '金錢的收入加倍') ans += '<span class="icons buff6" > </span>';
-        if (data.buff[j] == '每回移動步數+3 (控骰卡除外)') ans += '<span class="icons buff7" > </span>';
-        if (data.buff[j] == '每次被有效嫁禍時，可抽一張道具卡') ans += '<span class="icons buff8" > </span>';
-        if (data.buff[j] == '踩在有其他人的格子時，可搶走他至多50元') ans += '<span class="icons buff9" > </span>';
-        if (data.buff[j] == '使用傳送門的所需費用折半') ans += '<span class="icons buff10" > </span>';
+        if (data.buff[j].id == 1) ans += '<span class="icons buff1" > </span>';
+        if (data.buff[j].id == 2) ans += '<span class="icons buff2" > </span>';
+        if (data.buff[j].id == 3) ans += '<span class="icons buff3" > </span>';
+        if (data.buff[j].id == 4) ans += '<span class="icons buff4" > </span>';
+        if (data.buff[j].id == 5) ans += '<span class="icons buff5" > </span>';
+        if (data.buff[j].id == 6) ans += '<span class="icons buff6" > </span>';
+        if (data.buff[j].id == 7) ans += '<span class="icons buff7" > </span>';
+        if (data.buff[j].id == 8) ans += '<span class="icons buff8" > </span>';
+        if (data.buff[j].id == 9) ans += '<span class="icons buff9" > </span>';
+        if (data.buff[j].id == 10) ans += '<span class="icons buff10" > </span>';
     }
     return ans;
 }
@@ -74,10 +74,10 @@ function add_player_data(){
                                                                         
 function init(){
     playerData = [
-        { name: "玩家一", id: 0, money: 0, shield: 0, dice: [3], buff:[], x: 0, y: 23 },
-        { name: "玩家二", id: 1, money: 0, shield: 0, dice: [3], buff:[], x: 0, y: 23 },
-        { name: "玩家三", id: 2, money: 0, shield: 0, dice: [3], buff:[], x: 0, y: 23 },
-        { name: "玩家四", id: 3, money: 0, shield: 0, dice: [3], buff:[], x: 0, y: 23 }
+        { name: "玩家一", id: 0, money: 0, shield: 0, dice: [2], buff:[], x: 0, y: 23 },
+        { name: "玩家二", id: 1, money: 0, shield: 0, dice: [2], buff:[], x: 0, y: 23 },
+        { name: "玩家三", id: 2, money: 0, shield: 0, dice: [2], buff:[], x: 0, y: 23 },
+        { name: "玩家四", id: 3, money: 0, shield: 0, dice: [2], buff:[], x: 0, y: 23 }
     ];
     quesData = [
                 {id:0, money: 30, description: "前往起點"},
@@ -142,16 +142,16 @@ function init(){
                 {type: "dice", description:6},
                 {type: "dice", description:10},
                 {type: "dice", description:10},
-                {type: "buff", description:"可以免費將？卡嫁禍於人"},
-                {type: "buff", description:"他人無法用嫁禍無效卡來抵擋你的嫁禍"},
-                {type: "buff", description:"無限量嫁禍無效卡"},
-                {type: "buff", description:"到達星星格時，可一次抽兩張道具卡"},
-                {type: "buff", description:"每回合結束後獲得10元"},
-                {type: "buff", description:"金錢的收入加倍"},
-                {type: "buff", description:"每回移動步數+3 (控骰卡除外)"},
-                {type: "buff", description:"每次被有效嫁禍時，可抽一張道具卡"},
-                {type: "buff", description:"踩在有其他人的格子時，可搶走他至多50元"},
-                {type: "buff", description:"使用傳送門的所需費用折半"}
+                {type: "buff", id:1, description:"可以免費將？卡嫁禍於人"},
+                {type: "buff", id:2, description:"他人無法用嫁禍無效卡來抵擋你的嫁禍"},
+                {type: "buff", id:3, description:"無限量嫁禍無效卡"},
+                {type: "buff", id:4, description:"到達星星格時，可一次抽兩張道具卡"},
+                {type: "buff", id:5, description:"每回合結束後獲得10元"},
+                {type: "buff", id:6, description:"金錢的收入加倍"},
+                {type: "buff", id:7, description:"每回移動步數+3 (控骰卡除外)"},
+                {type: "buff", id:8, description:"每次被有效嫁禍時，可抽一張道具卡"},
+                {type: "buff", id:9, description:"踩在有其他人的格子時，可搶走他至多50元"},
+                {type: "buff", id:10, description:"使用傳送門的所需費用折半"}
             ]
     for (var i=quesData.length-1 ; i>0 ; i--){
         var temp = Math.floor(Math.random() * (i + 1));
