@@ -83,10 +83,22 @@ async function use_ques(ques, player){
             await sleep(10);
         }
     }
-    if (ques.id == 15) player.money += 50;
-    if (ques.id == 16) player.money += 100;
-    if (ques.id == 17) player.money += 100;
-    if (ques.id == 18) player.money += 200;
+    if (ques.id == 15){
+        player.money += 50;
+        if (have_buff(player, 6) == true) player.money += 50;
+    }
+    if (ques.id == 16){
+        player.money += 100;
+        if (have_buff(player, 6) == true) player.money += 100;
+    }
+    if (ques.id == 17){
+        player.money += 100;
+        if (have_buff(player, 6) == true) player.money += 100;
+    }
+    if (ques.id == 18){
+        player.money += 200;
+        if (have_buff(player, 6) == true) player.money += 200;
+    }
     if (ques.id == 19) player.money -= 50;
     if (ques.id == 20) player.money -= 100;
     if (ques.id == 21) player.money = 0;
@@ -149,46 +161,72 @@ async function use_ques(ques, player){
         for (var i=0 ; i<2 ; i++){
             await sleep(1000);
             if (starData.length == 0){
-                card.innerHTML = '<br>道具卡已經全部分發完';
+                card.innerHTML += '<br>道具卡已經全部分發完';
                 continue;
             }
             var star = starData.shift();
             if (star.type == "shield"){
                 player.shield += 1;
-                card.innerHTML = '<br>' + player.name + '獲得嫁禍無效卡';
+                card.innerHTML += '<br>' + player.name + '獲得嫁禍無效卡';
                 console.log(player.name, '獲得嫁禍無效卡');
             }
             if (star.type == "dice"){
                 player.dice.push(star.description);
-                card.innerHTML = '<br>' + player.name + '獲得控骰卡：骰' + star.description;
+                card.innerHTML += '<br>' + player.name + '獲得控骰卡：骰' + star.description;
                 console.log(player.name, '獲得控骰卡：骰', star.description);
             }
             if (star.type == "buff"){
                 player.buff.push(star);
-                card.innerHTML = '<br>' + player.name + '獲得永久效果卡：' + star.description;
+                card.innerHTML += '<br>' + player.name + '獲得永久效果卡：' + star.description;
                 console.log(player.name, '獲得永久效果卡：', star.description);
             }
         }
     }
     if (player.money < 0) player.money = 0;
+    output_player(player);
 }
 
 async function transfer(player, ques){
     await sleep(1000);
     var card = document.getElementById("card");
     var player2 = playerData[(player.id+1)%4];
-    if (player.money < ques.money) player2 = player;
+    var money = ques.money;
+    if (have_buff(player, 1) == true) money = 0;
+    if (player.money < money) player2 = player;
     if (player2.name != player.name){
         card.innerHTML += ('<br>' + player.name + '選擇嫁禍給' + player2.name);
         console.log(player.name, '選擇嫁禍給', player2.name);
-        player.money -= ques.money;
+        player.money -= money;
         await sleep(1000);
-        if (player2.shield != 0){
+        if ((have_buff(player, 2) == false) && ((player2.shield != 0) || (have_buff(player2, 3) == true))){
             card.innerHTML += ('<br>' + player2.name + '使用嫁禍無效卡');
             console.log(player2.name, '使用嫁禍無效卡');
             player2.shield -= 1;
             starData.push({type: "shield", description:""});
             return null;
+        }else{
+            if (have_buff(player2, 8) == true){
+                await sleep(1000);
+                if (starData.length == 0) card.innerHTML += '<br>道具卡已經全部分發完';
+                else{
+                    var star = starData.shift();
+                    if (star.type == "shield"){
+                        player2.shield += 1;
+                        card.innerHTML += '<br>(被動效果發動) ' + player2.name + '獲得嫁禍無效卡';
+                        console.log(player2.name, '獲得嫁禍無效卡');
+                    }
+                    if (star.type == "dice"){
+                        player2.dice.push(star.description);
+                        card.innerHTML += '<br>(被動效果發動) ' + player2.name + '獲得控骰卡：骰' + star.description;
+                        console.log(player2.name, '獲得控骰卡：骰', star.description);
+                    }
+                    if (star.type == "buff"){
+                        player2.buff.push(star);
+                        card.innerHTML += '<br>(被動效果發動) ' + player2.name + '獲得永久效果卡：' + star.description;
+                        console.log(player2.name, '獲得永久效果卡：', star.description);
+                    }
+                }
+            }
         }
     }
     await sleep(1000);
@@ -198,34 +236,47 @@ async function transfer(player, ques){
 async function get_buff(player){
     var card = document.getElementById("card");
     if (tileData[player.y][player.x].class == "tile money"){
-        player.money += 30;
-        card.innerHTML = '<br>' + player.name + '獲得30元';
-        console.log(player.name, '獲得30元');
+        var money = 30;
+        if (have_buff(player, 6) == true) money = 60;
+        player.money += money;
+        card.innerHTML = '<br>' + player.name + '獲得' + money + '元';
+        console.log(player.name, '獲得', money, '元');
     }
     if (tileData[player.y][player.x].class == "tile star"){
-        if (starData.length == 0) card.innerHTML = '<br>道具卡已經全部分發完';
-        else{
-            var star = starData.shift();
-            if (star.type == "shield"){
-                player.shield += 1;
-                card.innerHTML = '<br>' + player.name + '獲得嫁禍無效卡';
-                console.log(player.name, '獲得嫁禍無效卡');
+        var temp = 1;
+        if (have_buff(player, 4) == true) temp = 2;
+        for (var i=0 ; i<temp ; i++){
+            await sleep(1000);
+            if (i == 0){
+                card.innerHTML = '';
+                if (temp == 2) card.innerHTML = '<br>(被動效果發動) ';
             }
-            if (star.type == "dice"){
-                player.dice.push(star.description);
-                card.innerHTML = '<br>' + player.name + '獲得控骰卡：骰' + star.description;
-                console.log(player.name, '獲得控骰卡：骰', star.description);
-            }
-            if (star.type == "buff"){
-                player.buff.push(star);
-                card.innerHTML = '<br>' + player.name + '獲得永久效果卡：' + star.description;
-                console.log(player.name, '獲得永久效果卡：', star.description);
+            if (starData.length == 0) card.innerHTML += '<br>道具卡已經全部分發完';
+            else{
+                var star = starData.shift();
+                if (star.type == "shield"){
+                    player.shield += 1;
+                    card.innerHTML += '<br>' + player.name + '獲得嫁禍無效卡';
+                    console.log(player.name, '獲得嫁禍無效卡');
+                }
+                if (star.type == "dice"){
+                    player.dice.push(star.description);
+                    card.innerHTML += '<br>' + player.name + '獲得控骰卡：骰' + star.description;
+                    console.log(player.name, '獲得控骰卡：骰', star.description);
+                }
+                if (star.type == "buff"){
+                    player.buff.push(star);
+                    card.innerHTML += '<br>' + player.name + '獲得永久效果卡：' + star.description;
+                    console.log(player.name, '獲得永久效果卡：', star.description);
+                }
             }
         }
     }
     if (tileData[player.y][player.x].class == "tile ques"){
         var ques = quesData[quesData[quesData.length-1]];
-        card.innerHTML = '<br>' + '？卡效果：' + ques.description + '<br>' + '（嫁禍金額：' + ques.money + '）';
+        var money = ques.money;
+        if (have_buff(player, 1) == true) money = 0;
+        card.innerHTML = '<br>' + '？卡效果：' + ques.description + '<br>' + '（嫁禍金額：' + money + '）';
         console.log('？卡效果：' + ques.description);
         quesData[quesData.length-1] = (quesData[quesData.length-1] + 1) % (quesData.length-1);
         var to_player = await transfer(player, ques);
@@ -246,6 +297,11 @@ async function moveAI(player){
         diceNumber = await roll();
         card.innerHTML = '<br>' + player.name + '骰出了 ' + diceNumber;
         console.log(player.name + '骰出了 ' + diceNumber);
+        if (have_buff(player, 7) == true){
+            diceNumber += 3;
+            card.innerHTML += '<br>(被動效果發動) 可以走'+ diceNumber + '步';
+            console.log('可以走', diceNumber, '步');
+        }
     }else{
         await sleep(1000);
         card.innerHTML = '<br>' + player.name + '使用控骰卡：骰' + diceNumber;
@@ -272,6 +328,29 @@ async function main(){
         for (var i = 0; i < playerData.length; i++) {
             if (i == 0) await moveAI(playerData[i]);
             else await moveAI(playerData[i]);
+            if (have_buff(playerData[i], 5) == true){
+                await sleep(1000);
+                var money = 10;
+                if (have_buff(playerData[i], 6) == true) money = 20;
+                playerData[i].money += money;
+                output_player(playerData[i]);
+                var card = document.getElementById("card");
+                card.innerHTML += '<br>(被動效果發動) ' + playerData[i].name + '獲得' + money + '元';
+            }
+            for (var j=0 ; j<playerData.length ; j++){
+                if (i == j) continue;
+                if (have_buff(playerData[i], 9) == false) continue;
+                if ((playerData[i].x == playerData[j].x) && (playerData[i].y == playerData[j].y)){
+                    await sleep(1000);
+                    var money = 50;
+                    if (playerData[j].money < 50) money = playerData[j].money;
+                    [playerData[i].money, playerData[j].money] = [playerData[i].money+money, playerData[j].money-money];
+                    var card = document.getElementById("card");
+                    card.innerHTML += '<br>(被動效果發動) ' + playerData[i].name + '搶走' + playerData[j].name + money + '元';
+                    output_player(playerData[i]);
+                    output_player(playerData[j]);
+                }
+            }
             await sleep(1000);
             if ((playerData[i].x == 9) && (playerData[i].y == 12)){
                 var card = document.getElementById("card");

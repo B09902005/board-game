@@ -74,10 +74,10 @@ function add_player_data(){
                                                                         
 function init(){
     playerData = [
-        { name: "玩家一", id: 0, money: 0, shield: 0, dice: [2], buff:[], x: 0, y: 23 },
-        { name: "玩家二", id: 1, money: 0, shield: 0, dice: [2], buff:[], x: 0, y: 23 },
-        { name: "玩家三", id: 2, money: 0, shield: 0, dice: [2], buff:[], x: 0, y: 23 },
-        { name: "玩家四", id: 3, money: 0, shield: 0, dice: [2], buff:[], x: 0, y: 23 }
+        { name: "玩家一", id: 0, money: 70, shield: 0, dice: [2], buff:[{type: "buff", id:9, description:"踩在有其他人的格子時，可搶走他至多50元"}], x: 0, y: 23 },
+        { name: "玩家二", id: 1, money: 10, shield: 0, dice: [2], buff:[{type: "buff", id:9, description:"踩在有其他人的格子時，可搶走他至多50元"}], x: 0, y: 23 },
+        { name: "玩家三", id: 2, money: 30, shield: 0, dice: [2], buff:[{type: "buff", id:9, description:"踩在有其他人的格子時，可搶走他至多50元"}], x: 0, y: 23 },
+        { name: "玩家四", id: 3, money: 0, shield: 0, dice: [2], buff:[{type: "buff", id:9, description:"踩在有其他人的格子時，可搶走他至多50元"}], x: 0, y: 23 }
     ];
     quesData = [
                 {id:0, money: 30, description: "前往起點"},
