@@ -18,9 +18,9 @@
         
     <div class="big_dice"> </div>
     <img id="big_dice" class="big_dice" src="images/dice/1.png">
-    <button onclick="roll()" class="roll"> 用骰子移動 </button>
-    <button onclick="roll()" class="use_star"> 用控骰卡移動 </button>
-    <button onclick="openmodal()" class="door" id="door"> 用傳送門移動 </button>
+    <button onclick="roll2()" class="roll" id="roll" disabled> 繼續遊戲 </button>
+    <!-- <button onclick="roll2()" class="use_star" id="use_star" disabled> 用控骰卡移動 </button> -->
+    <!-- <button onclick="openmodal()" class="door" id="door" disabled> 用傳送門移動 </button> -->
     <div class="card" id="card"> </div>
             
     <div class="player_data", id="player_data">
@@ -32,13 +32,12 @@
     
     <div id="myModal" class="modal">
         <button class="btnOption one" onclick="transferto('車站',100)">移動至車站($100)</button>
-        <button class="btnOption two" onclick="transferto('廣場',300)">移動至廣場($250)</button>
+        <button class="btnOption two" onclick="transferto('廣場',300)">移動至廣場($300)</button>
         <button class="btnOption three" onclick="transferto('終點',500)">移動至終點($500)</button>
     </div>
 
 </body>
 </html>
 
-<!-- TODO: （難）好的ＡＩ(如何移動的三種可能、往哪移動、是否嫁禍與是否無效) -->
-<!-- TODO: （中）玩家操控 -->
-<!-- TODO: （易）遊戲規則 (hackmd) -->
+<!-- TODO: 玩家操控 -->
+<!-- TODO: 遊戲規則 (hackmd) -->

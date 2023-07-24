@@ -74,10 +74,10 @@ function add_player_data(){
                                                                         
 function init(){
     playerData = [
-        { name: "玩家一", id: 0, money: 70, shield: 0, dice: [2], buff:[{type: "buff", id:9, description:"踩在有其他人的格子時，可搶走他至多50元"}], x: 0, y: 23 },
-        { name: "玩家二", id: 1, money: 10, shield: 0, dice: [2], buff:[{type: "buff", id:9, description:"踩在有其他人的格子時，可搶走他至多50元"}], x: 0, y: 23 },
-        { name: "玩家三", id: 2, money: 30, shield: 0, dice: [2], buff:[{type: "buff", id:9, description:"踩在有其他人的格子時，可搶走他至多50元"}], x: 0, y: 23 },
-        { name: "玩家四", id: 3, money: 0, shield: 0, dice: [2], buff:[{type: "buff", id:9, description:"踩在有其他人的格子時，可搶走他至多50元"}], x: 0, y: 23 }
+        { name: "玩家一", id: 0, person: false, money: 0, shield: 0, dice: [], buff:[], x: 0, y: 23 },
+        { name: "玩家二", id: 1, person: false, money: 0, shield: 0, dice: [], buff:[], x: 0, y: 23 },
+        { name: "玩家三", id: 2, person: false, money: 0, shield: 0, dice: [], buff:[], x: 0, y: 23 },
+        { name: "玩家四", id: 3, person: false, money: 0, shield: 0, dice: [], buff:[], x: 0, y: 23 }
     ];
     quesData = [
                 {id:0, money: 30, description: "前往起點"},
@@ -162,9 +162,10 @@ function init(){
         var temp = Math.floor(Math.random() * (i + 1));
         [starData[i], starData[temp]] = [starData[temp], starData[i]];
     }
-    console.log(quesData);
-    console.log(starData);
 }
+
+var global_dice = -1;
+var global_path = [];
                                                                         
 var playerData = [
     { name: "玩家一", id: 0, money: 0, shield: 0, dice: [], buff:[], x: 0, y: 23 },
@@ -247,7 +248,7 @@ var tileData = [
     { class: "tile money" },
     { class: "tile nothing" },
     { class: "tile nothing" },
-    { class: "tile normal" },
+    { class: "tile star" },
     { class: "tile nothing" },
     { class: "tile nothing" }],
     
@@ -284,7 +285,7 @@ var tileData = [
     { class: "tile nothing" },
     { class: "tile nothing" },
     { class: "tile nothing" },
-    { class: "tile normal" },
+    { class: "tile ques" },
     { class: "tile nothing" },
     { class: "tile nothing" },
     { class: "tile star" },
@@ -539,10 +540,10 @@ var tileData = [
     { class: "tile money" },
     { class: "tile normal" },
     { class: "tile ques" },
+    { class: "tile money" },
     { class: "tile normal" },
     { class: "tile normal" },
-    { class: "tile normal" },
-    { class: "tile normal" },
+    { class: "tile star" },
     { class: "tile ques" },
     { class: "tile money" },
     { class: "tile ques" },
@@ -613,8 +614,8 @@ var tileData = [
     
     [{ class: "tile nothing" },
     { class: "tile nothing" },
-    { class: "tile normal" },
     { class: "tile money" },
+    { class: "tile star" },
     { class: "tile nothing" },
     { class: "tile nothing" },
     { class: "tile nothing" },
@@ -663,7 +664,7 @@ var tileData = [
     { class: "tile star" },
     { class: "tile place" },
     { class: "tile ques" },
-    { class: "tile normal" },
+    { class: "tile money" },
     { class: "tile normal" },
     { class: "tile normal" },
     { class: "tile star" },

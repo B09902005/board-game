@@ -6,9 +6,9 @@ function have_buff(player, id){
     return false;
 }
 
-function find_all_paths(player, num){
-    if (num == 0) return [[{x:player.x, y:player.y}]];
-    var prev_paths = find_all_paths(player, num-1);
+function find_all_paths(x, y, num){
+    if (num == 0) return [[{x:x, y:y}]];
+    var prev_paths = find_all_paths(x, y, num-1);
     var paths = [];
     var dx = [-1,0,1,0];
     var dy = [0,1,0,-1];
@@ -33,7 +33,7 @@ function distance_to_terminal(x, y){
     }
     var list = [{x:9, y:12}];
     var distance_now = 0;
-    distance[9][12] = 0;
+    distance[12][9] = 0;
     var dx = [-1,0,1,0];
     var dy = [0,1,0,-1];
     while (list.length != 0){
@@ -51,7 +51,6 @@ function distance_to_terminal(x, y){
         }
         list = templist;
     }
-    console.log(x, y, distance[y][x]);
     return distance[y][x];
 }
 
@@ -186,10 +185,88 @@ async function use_ques(ques, player){
     output_player(player);
 }
 
+function throw_ques(player, ques){
+    var dest = {};
+    var nearest = playerData[(player.id+1)%playerData.length];
+    var richest = playerData[(player.id+1)%playerData.length];
+    var diceest = playerData[(player.id+1)%playerData.length];
+    var buffest = playerData[(player.id+1)%playerData.length];
+    var prevwinner = null;
+    for (var i=0 ; i<playerData.length ; i++){
+        if (player.name == playerData[i].name) continue;
+        if (distance_to_terminal(nearest.x, nearest.y) > distance_to_terminal(playerData[i].x, playerData[i].y)) nearest = playerData[i];
+        if (richest.money < playerData[i].money) richest = playerData[i];
+        if (diceest.dice.length < playerData[i].dice.length) diceest = playerData[i];
+        if (buffest.buff.length < playerData[i].buff.length) buffest = playerData[i];
+        if (canwin(playerData[i].x, playerData[i].y, playerData[i].dice) != 0) prevwinner = playerData[i];
+    }
+    if (ques.id == 0) dest = {x:0, y:23};
+    if (ques.id == 1) dest = {x:0, y:23};
+    if (ques.id == 2) dest = {x:3, y:22};
+    if (ques.id == 3) dest = {x:2, y:19};
+    if (ques.id == 4) dest = {x:10, y:23};
+    if (ques.id == 5) dest = {x:18, y:19};
+    if (ques.id == 6) dest = {x:18, y:19};
+    if (ques.id == 7) dest = {x:0, y:9};
+    if (ques.id == 8) dest = {x:13, y:6};
+    if (ques.id == 9) dest = {x:16, y:5};
+    if (ques.id == 10) dest = {x:18, y:0};
+    if (ques.id == 11) dest = {x:2, y:0};
+    if (ques.id == 12) dest = {x:7, y:0};
+    if (ques.id == 13) dest = {x:9, y:9};
+    if (ques.id == 14) dest = {x:9, y:9};
+    if (ques.id <= 14){
+        if (prevwinner != null) return prevwinner;
+        if (distance_to_terminal(player.x, player.y) < distance_to_terminal(dest.x, dest.y) - 10) return nearest;
+        if (distance_to_terminal(nearest.x, nearest.y) <= 10) return nearest;
+        return player;
+    }
+    if (ques.id <= 18) return player;
+    if (ques.id <= 21) return richest;
+    if (ques.id <= 22){
+        if (prevwinner != null) return prevwinner;
+        return buffest;
+    }
+    if (ques.id <= 23){
+        if (prevwinner != null) return prevwinner;
+        return diceest;
+    }
+    if (ques.id <= 24) return buffest;
+    return player;
+}
+
+function use_shield(player, ques){
+    if (ques.id >= 25) return false;
+    if ((ques.id >= 12) && (ques.id <= 18)) return false;
+    if (have_buff(player, 3) == true) return true;
+    if (ques.id <= 14){
+        var dest = {};
+        if (ques.id == 0) dest = {x:0, y:23};
+        if (ques.id == 1) dest = {x:0, y:23};
+        if (ques.id == 2) dest = {x:3, y:22};
+        if (ques.id == 3) dest = {x:2, y:19};
+        if (ques.id == 4) dest = {x:10, y:23};
+        if (ques.id == 5) dest = {x:18, y:19};
+        if (ques.id == 6) dest = {x:18, y:19};
+        if (ques.id == 7) dest = {x:0, y:9};
+        if (ques.id == 8) dest = {x:13, y:6};
+        if (ques.id == 9) dest = {x:16, y:5};
+        if (ques.id == 10) dest = {x:18, y:0};
+        if (ques.id == 11) dest = {x:2, y:0};
+        if (ques.id == 12) dest = {x:7, y:0};
+        if (ques.id == 13) dest = {x:9, y:9};
+        if (ques.id == 14) dest = {x:9, y:9};
+        if (distance_to_terminal(player.x, player.y) < distance_to_terminal(dest.x, dest.y) - 10) return true;
+        return false;
+    }
+    if (ques.id >= 21) return true;
+    return false;
+}
+
 async function transfer(player, ques){
     await sleep(1000);
     var card = document.getElementById("card");
-    var player2 = playerData[(player.id+1)%4];
+    var player2 = throw_ques(player, ques);
     var money = ques.money;
     if (have_buff(player, 1) == true) money = 0;
     if (player.money < money) player2 = player;
@@ -198,11 +275,15 @@ async function transfer(player, ques){
         console.log(player.name, '選擇嫁禍給', player2.name);
         player.money -= money;
         await sleep(1000);
-        if ((have_buff(player, 2) == false) && ((player2.shield != 0) || (have_buff(player2, 3) == true))){
+        var defend = use_shield(player2, ques);
+        if ((defend == true) && (have_buff(player, 2) == false) && ((player2.shield != 0) || (have_buff(player2, 3) == true))){
             card.innerHTML += ('<br>' + player2.name + '使用嫁禍無效卡');
             console.log(player2.name, '使用嫁禍無效卡');
-            player2.shield -= 1;
-            starData.push({type: "shield", description:""});
+            if (have_buff(player2, 3) == false){
+                player2.shield -= 1;
+                starData.push({type: "shield", description:""});
+            }
+            output_player(player2);
             return null;
         }else{
             if (have_buff(player2, 8) == true){
@@ -283,81 +364,209 @@ async function get_buff(player){
         await use_ques(ques, to_player);
     }
     output_player(player);
-}
-
-function pick_dice(player){
-    if (player.dice.length == 0) return null;
-    return player.dice.shift();
-}
-
-async function moveAI(player){
-    var card = document.getElementById("card");
-    var diceNumber = pick_dice(player);
-    if (diceNumber == null){
-        diceNumber = await roll();
-        card.innerHTML = '<br>' + player.name + '骰出了 ' + diceNumber;
-        console.log(player.name + '骰出了 ' + diceNumber);
-        if (have_buff(player, 7) == true){
-            diceNumber += 3;
-            card.innerHTML += '<br>(被動效果發動) 可以走'+ diceNumber + '步';
-            console.log('可以走', diceNumber, '步');
-        }
-    }else{
+    if (have_buff(player, 5) == true){
         await sleep(1000);
-        card.innerHTML = '<br>' + player.name + '使用控骰卡：骰' + diceNumber;
-        console.log(player.name + '使用控骰卡：骰' + diceNumber);
-        starData.push({type: "dice", description:diceNumber});
+        var money = 10;
+        if (have_buff(player, 6) == true) money = 20;
+        player.money += money;
+        output_player(player);
+        var card = document.getElementById("card");
+        card.innerHTML += '<br>(被動效果發動) ' + player.name + '獲得' + money + '元';
+    }
+    for (var j=0 ; j<playerData.length ; j++){
+        if (player.name == playerData[j].name) continue;
+        if (have_buff(player, 9) == false) continue;
+        if ((player.x == playerData[j].x) && (player.y == playerData[j].y)){
+            await sleep(1000);
+            var money = 50;
+            if (playerData[j].money < 50) money = playerData[j].money;
+            [player.money, playerData[j].money] = [player.money+money, playerData[j].money-money];
+            var card = document.getElementById("card");
+            card.innerHTML += '<br>(被動效果發動) ' + player.name + '搶走' + playerData[j].name + money + '元';
+            output_player(player);
+            output_player(playerData[j]);
+        }
     }
     await sleep(1000);
-    var paths = find_all_paths(player, diceNumber);
-    var path = paths[Math.floor(Math.random()*paths.length)]
-    console.log(path[0].x, path[0].y, 'to', path[diceNumber].x, path[diceNumber].y);
-    for (var i=1 ; i<=diceNumber ; i++){
-        player.x = path[i].x;
-        player.y = path[i].y;
-        output_player(player);
-        await sleep(500);
+}
+
+async function pick_dice_AI(player){
+    if ((player.money >= 500) || ((have_buff(player, 10)) && (player.money >= 250))){
+        global_dice = await transferto(player, '終點', 500);
+        return global_dice;
+    }
+    if (player.dice.length == 0){ // no card then roll
+        global_dice = await roll();
+        return global_dice;
+    }
+    if (canwin(player.x, player.y, player.dice) != 0){ // will win then card
+        global_dice = -canwin(player.x, player.y, player.dice);
+        return global_dice;
+    }
+    if ((player.money >= 300) || ((have_buff(player, 10)) && (player.money >= 150))){
+        for (var i=0 ; i<player.dice.length ; i++){
+            if (player.dice[i] == 3){
+                global_dice = await transferto(player, '廣場', 300);
+                return global_dice;
+            }
+        }
+    }
+    if (distance_to_terminal(player.x, player.y) <= 10){ // no win but near then roll
+        global_dice = await roll();
+        return global_dice;
+    }
+    for (var i=0 ; i<player.dice.length ; i++){ // have to attack then card
+        var paths = find_all_paths(player.x, player.y, player.dice[i]);
+        for (var j=0 ; j<paths.length ; j++){
+            var point = paths[j][paths[j].length-1];
+            if ((score_of_path(player, point) > 3000) && (score_of_path(player, point) < 20000)){
+                global_dice = -player.dice[i];
+                return global_dice;
+            }
+        }
+    }
+    global_dice = await roll();
+    return global_dice;
+}
+
+function canwin(x, y, dice){
+    var distance = distance_to_terminal(x, y);
+    for (var i=0 ; i<dice.length ; i++){
+        if (distance == dice[i]) return dice[i];
+    }
+    for (var i=0 ; i<dice.length ; i++){
+        var paths = find_all_paths(x, y, dice[i]);
+        for (var j=0 ; j<dice.length ; j++){
+            if (i == j) continue;
+            for (var k=0 ; k<paths.length ; k++){
+                var point = paths[k][paths[k].length-1];
+                distance = distance_to_terminal(point.x, point.y);
+                if (distance == dice[j]) return dice[i];
+            }
+        }
+    }
+    return 0;
+}
+
+function score_of_path(player, point){
+    var distance = distance_to_terminal(point.x, point.y);
+    if (distance == 0) return 10000000;
+    if (canwin(point.x, point.y, player.dice) != 0) return 100000;
+    var score = -10 * distance;
+    var star = player.shield + player.dice.length + player.buff.length;
+    if (tileData[point.y][point.x].class == "tile money"){
+        score += 50;
+        if (have_buff(player, 6) == true) score += 50;
+        if (player.money >= 200) score += 100;
+        if (player.money >= 350) score += 4000;
+    }
+    if (tileData[point.y][point.x].class == "tile star"){
+        score += (72-7*star);
+        if (have_buff(player, 4) == true) score += (72-7*star);
+    }
+    if (tileData[point.y][point.x].class == "tile ques"){
+        if (have_buff(player, 1) == true) score += 120;
+        if (have_buff(player, 2) == true) score += 30;
+        if (distance > 30){
+            score += 47;
+            score -= star * 15;
+        }else{
+            score -= star * 3;
+            if (player.money < 50) score -= 25;
+            if (distance < 10) score -= 25;
+        }
+        for (var i=0 ; i<playerData.length ; i++){
+            if (player.name == playerData[i].name) continue;
+            if ((distance_to_terminal(playerData[i].x, playerData[i].y) < 10) && (have_buff(playerData[i], 3) == false) && (player.money >= 30)) score += 5000;
+        }
+    }
+    if (have_buff(player, 9) == true){
+        for (var i=0 ; i<playerData.length ; i++){
+            if ((playerData[i].x == point.x) && (playerData[i].y == point.y)) score += 70;
+        }
+    }
+    return score;
+}
+
+function find_path_AI(player, paths){
+    var path = paths[0];
+    var score = score_of_path(player, paths[0][paths[0].length-1]);
+    for (var i=0 ; i<paths.length ; i++){
+        if (score_of_path(player, paths[i][paths[i].length-1]) > score){
+            path = paths[i];
+            score = score_of_path(player, paths[i][paths[i].length-1]);
+        }
+    }
+    return path;
+}
+
+async function moveplayer(player, diceNumber){
+    var card = document.getElementById("card");
+    if (diceNumber <= 50){
+        if (diceNumber > 0){ // roll
+            card.innerHTML = '<br>' + player.name + '骰出了 ' + diceNumber;
+            console.log(player.name + '骰出了 ' + diceNumber);
+            if (have_buff(player, 7) == true){
+                diceNumber += 3;
+                card.innerHTML += '<br>(被動效果發動) 可以走'+ diceNumber + '步';
+                console.log('可以走', diceNumber, '步');
+            }
+        }else if (diceNumber < 0){ // card
+            diceNumber = -diceNumber;
+            var index = player.dice.indexOf(diceNumber);
+            player.dice.splice(index, 1);
+            await sleep(1000);
+            card.innerHTML = '<br>' + player.name + '使用控骰卡：骰' + diceNumber;
+            console.log(player.name + '使用控骰卡：骰' + diceNumber);
+            starData.push({type: "dice", description:diceNumber});
+        }
+        await sleep(1000);
+        var paths = find_all_paths(player.x, player.y, diceNumber);
+        if (player.person == false) global_path = find_path_AI(player, paths);
+        else global_path = find_path_AI(player, paths);
+        var path = global_path;
+        console.log(path[0].x, path[0].y, 'to', path[diceNumber].x, path[diceNumber].y);
+        for (var i=1 ; i<=diceNumber ; i++){
+            player.x = path[i].x;
+            player.y = path[i].y;
+            output_player(player);
+            await sleep(500);
+        }
     }
     await sleep(1000);
     await get_buff(player);
-    console.log(starData.length);
+    if ((player.x == 9) && (player.y == 12)){
+        var card = document.getElementById("card");
+        card.innerHTML = '<br>' + '恭喜' + player.name + '勝出！';
+        console.log(player.name + '勝出！');
+        return;
+    }else my_turn((player.id+1)%playerData.length);
 }
 
-async function main(){
-    while (true) {
-        for (var i = 0; i < playerData.length; i++) {
-            if (i == 0) await moveAI(playerData[i]);
-            else await moveAI(playerData[i]);
-            if (have_buff(playerData[i], 5) == true){
-                await sleep(1000);
-                var money = 10;
-                if (have_buff(playerData[i], 6) == true) money = 20;
-                playerData[i].money += money;
-                output_player(playerData[i]);
-                var card = document.getElementById("card");
-                card.innerHTML += '<br>(被動效果發動) ' + playerData[i].name + '獲得' + money + '元';
-            }
-            for (var j=0 ; j<playerData.length ; j++){
-                if (i == j) continue;
-                if (have_buff(playerData[i], 9) == false) continue;
-                if ((playerData[i].x == playerData[j].x) && (playerData[i].y == playerData[j].y)){
-                    await sleep(1000);
-                    var money = 50;
-                    if (playerData[j].money < 50) money = playerData[j].money;
-                    [playerData[i].money, playerData[j].money] = [playerData[i].money+money, playerData[j].money-money];
-                    var card = document.getElementById("card");
-                    card.innerHTML += '<br>(被動效果發動) ' + playerData[i].name + '搶走' + playerData[j].name + money + '元';
-                    output_player(playerData[i]);
-                    output_player(playerData[j]);
-                }
-            }
-            await sleep(1000);
-            if ((playerData[i].x == 9) && (playerData[i].y == 12)){
-                var card = document.getElementById("card");
-                card.innerHTML = '<br>' + '恭喜' + playerData[i].name + '勝出！';
-                console.log(playerData[i].name + '勝出！');
-                return;
-            }
-        }
+async function my_turn(i){
+    var button1 = document.getElementById("roll");
+    //var button2 = document.getElementById("use_star");
+    //var button3 = document.getElementById("door");
+    if (playerData[i].person == false){ // AI
+        button1.disabled = true;
+        //button2.disabled = true;
+        //button3.disabled = true;
+        button1.disabled = false;
+        var card = document.getElementById("card");
+        card.innerHTML = '<br>輪到' + playerData[i].name + '，請按按鈕以繼續遊戲。';
+        global_dice = -1;
+        while (global_dice == -1) await sleep(100);
+        await pick_dice_AI(playerData[i]);
+        await moveplayer(playerData[i], global_dice);
+    }
+    else{ // person
+        button1.disabled = false;
+        //button2.disabled = false;
+        //button3.disabled = false;
+        var card = document.getElementById("card");
+        card.innerHTML = '<br>輪到' + playerData[i].name + '，請按按鈕移動。';
+        global_dice = -1;
+        while (global_dice == -1) await sleep(100);
+        await moveplayer(playerData[i], global_dice);
     }
 }

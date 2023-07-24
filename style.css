@@ -167,14 +167,14 @@ button{
 .icons.buff9 {background-image: url("images/buff/9.png");}
 .icons.buff10 {background-image: url("images/buff/10.png");}
 
-.icons.buff1:hover::before{position: absolute; content: '可以免費將？卡嫁禍於人'; top: 20px; left:-50px; width: 100px;}
-.icons.buff2:hover::before{position: absolute; content: '他人無法用嫁禍無效卡來抵擋你的嫁禍'; top: 20px; left:-50px; width: 100px;}
-.icons.buff3:hover::before{position: absolute; content: '無限量嫁禍無效卡'; top: 20px; left:-50px; width: 100px;}
-.icons.buff4:hover::before{position: absolute; content: '到達星星格時，可一次抽兩張道具卡'; top: 20px; left:-50px; width: 100px;}
-.icons.buff5:hover::before{position: absolute; content: '每回合結束後獲得10元'; top: 20px; left:-50px; width: 100px;}
-.icons.buff6:hover::before{position: absolute; content: '金錢的收入加倍'; top: 20px; left:-50px; width: 100px;}
-.icons.buff7:hover::before{position: absolute; content: '每回移動步數+3 (控骰卡除外)'; top: 20px; left:-50px; width: 100px;}
-.icons.buff8:hover::before{position: absolute; content: '每次被有效嫁禍時，可抽一張道具卡'; top: 20px; left:-50px; width: 100px;}
-.icons.buff9:hover::before{position: absolute; content: '踩在有其他人的格子時，可搶走他至多50元'; top: 20px; left:-50px; width: 100px;}
-.icons.buff10:hover::before{position: absolute; content: '使用傳送門的所需費用折半'; top: 20px;  left:-50px; width: 100px;}
+.icons.buff1:hover::before{position: absolute; content: '可以免費將？卡嫁禍於人'; top: 20px; left:-50px; width: 150px;}
+.icons.buff2:hover::before{position: absolute; content: '他人無法用嫁禍無效卡來抵擋你的嫁禍'; top: 20px; left:-50px; width: 150px;}
+.icons.buff3:hover::before{position: absolute; content: '無限量嫁禍無效卡'; top: 20px; left:-50px; width: 150px;}
+.icons.buff4:hover::before{position: absolute; content: '到達星星格時，可一次抽兩張道具卡'; top: 20px; left:-50px; width: 150px;}
+.icons.buff5:hover::before{position: absolute; content: '每回合結束後獲得10元'; top: 20px; left:-50px; width: 150px;}
+.icons.buff6:hover::before{position: absolute; content: '金錢的收入加倍'; top: 20px; left:-50px; width: 150px;}
+.icons.buff7:hover::before{position: absolute; content: '每回移動步數+3 (控骰卡除外)'; top: 20px; left:-50px; width: 150px;}
+.icons.buff8:hover::before{position: absolute; content: '每次被有效嫁禍時，可抽一張道具卡'; top: 20px; left:-50px; width: 150px;}
+.icons.buff9:hover::before{position: absolute; content: '踩在有其他人的格子時，可搶走他至多50元'; top: 20px; left:-50px; width: 150px;}
+.icons.buff10:hover::before{position: absolute; content: '使用傳送門的所需費用折半'; top: 20px;  left:-50px; width: 150px;}
 

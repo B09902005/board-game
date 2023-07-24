@@ -2,12 +2,15 @@ async function sleep(ms){
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+async function roll2(){
+    global_dice = 10;
+}
+
 async function roll(){
     var intervalId;
     var diceImage = document.getElementById("big_dice");
     var counter = 0;
     var num = -1;
-    
     for (var i=0 ; i<20 ; i++){
         var temp = num;
         while (temp == num) temp = Math.floor(Math.random() * 6) + 1;
@@ -15,6 +18,7 @@ async function roll(){
         diceImage.src = "images/dice/" + num + ".png";
         await sleep(50);
     }
+    global_dice = num;
     return num;
 }
 
@@ -39,11 +43,11 @@ function output_player(player){
     player_icon.style.marginTop = 40 * player.y + Math.floor(player.id/2) * 10 + "px";
 }
 
-function start_game(){
+async function start_game(){
     init();
-    console.log("重新開始");
+    console.log("遊戲開始");
     for (var i = 0; i < playerData.length; i++) output_player(playerData[i]);
-    main();
+    my_turn(0);
 }
 
 function restart(){
@@ -51,22 +55,25 @@ function restart(){
     if (temp) location.reload();
 }
 
-async function transferto(place, money){
-    var player = playerData[0];
+async function transferto(player, place, m){
+    var money = m;
+    if (have_buff(player, 10) == true) money = money / 2;
     if (player.money < money){
         alert("玩家金錢不足");
-        return;
+        return m;
     }
-    var temp = confirm('確定要花費$' + money + '，在這回合移動到' + place + '？');
+    var temp = true;
+    if (player.person == true) temp = confirm('確定要花費$' + money + '，在這回合移動到' + place + '？');
     if (temp == true){
         player.money -= money;
         var card = document.getElementById("card");
-        card.innerHTML = ('<br>' + player.name + '使用傳送門移動至' + place);
-        console.log(player.name, '使用傳送門移動至', place);
+        card.innerHTML = ('<br>' + player.name + '花' + money + '元，使用傳送門移動至' + place);
+        console.log(player.name, '花', money, '元，使用傳送門移動至', place);
         var ques = {id:999, money: 0, description: ""};
         if (place == '車站') ques.id = 12;
         if (place == '廣場') ques.id = 14;
         if (place == '終點') ques.id = -1;
-        use_ques(ques, player);
+        await use_ques(ques, player);
     }
+    return m;
 }
