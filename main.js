@@ -215,8 +215,8 @@ function throw_ques(player, ques){
     if (ques.id == 12) dest = {x:7, y:0};
     if (ques.id == 13) dest = {x:9, y:9};
     if (ques.id == 14) dest = {x:9, y:9};
-    if (ques.id <= 14){
-        if (prevwinner != null) return prevwinner;
+    if (ques.id <= 14) if (prevwinner != null) return prevwinner;
+    if (ques.id <= 12){
         if (distance_to_terminal(player.x, player.y) < distance_to_terminal(dest.x, dest.y) - 10) return nearest;
         if (distance_to_terminal(nearest.x, nearest.y) <= 10) return nearest;
         return player;
