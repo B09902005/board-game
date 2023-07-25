@@ -93,7 +93,7 @@ function init(){
                 {id:10, money: 20, description: "前往寺廟"},
                 {id:11, money: 10, description: "前往古蹟"},
                 {id:12, money: 10, description: "前往車站"},
-                {id:13, money: 10, description: "前往廣場"},
+                {id:13, money: 10, description: "前往車站"},
                 {id:14, money: 10, description: "前往廣場"},
                 {id:15, money: 100, description: "獲得50元"},
                 {id:16, money: 100, description: "獲得100元"},

@@ -72,7 +72,7 @@ async function use_ques(ques, player){
         if (ques.id == 10) dest = {x:18, y:0};
         if (ques.id == 11) dest = {x:2, y:0};
         if (ques.id == 12) dest = {x:7, y:0};
-        if (ques.id == 13) dest = {x:9, y:9};
+        if (ques.id == 13) dest = {x:7, y:0};
         if (ques.id == 14) dest = {x:9, y:9};
         if (ques.id == -1) dest = {x:9, y:12};
         for (var i=1 ; i<=100 ; i++){
@@ -172,7 +172,7 @@ async function use_ques(ques, player){
             if (star.type == "dice"){
                 player.dice.push(star.description);
                 card.innerHTML += '<br>' + player.name + '獲得控骰卡：骰' + star.description;
-                console.log(player.name, '獲得控骰卡：骰', star.description);
+                console.log(player.name, '獲得控骰卡：骰'+ star.description);
             }
             if (star.type == "buff"){
                 player.buff.push(star);
@@ -213,7 +213,7 @@ function throw_ques(player, ques){
     if (ques.id == 10) dest = {x:18, y:0};
     if (ques.id == 11) dest = {x:2, y:0};
     if (ques.id == 12) dest = {x:7, y:0};
-    if (ques.id == 13) dest = {x:9, y:9};
+    if (ques.id == 13) dest = {x:7, y:0};
     if (ques.id == 14) dest = {x:9, y:9};
     if (ques.id <= 14) if (prevwinner != null) return prevwinner;
     if (ques.id <= 12){
@@ -254,7 +254,7 @@ function use_shield(player, ques){
         if (ques.id == 10) dest = {x:18, y:0};
         if (ques.id == 11) dest = {x:2, y:0};
         if (ques.id == 12) dest = {x:7, y:0};
-        if (ques.id == 13) dest = {x:9, y:9};
+        if (ques.id == 13) dest = {x:7, y:0};
         if (ques.id == 14) dest = {x:9, y:9};
         if (distance_to_terminal(player.x, player.y) < distance_to_terminal(dest.x, dest.y) - 10) return true;
         return false;
@@ -294,17 +294,17 @@ async function transfer(player, ques){
                     if (star.type == "shield"){
                         player2.shield += 1;
                         card.innerHTML += '<br>(被動效果發動) ' + player2.name + '獲得嫁禍無效卡';
-                        console.log(player2.name, '獲得嫁禍無效卡');
+                        console.log(player2.name, '被動效果發動，獲得嫁禍無效卡');
                     }
                     if (star.type == "dice"){
                         player2.dice.push(star.description);
                         card.innerHTML += '<br>(被動效果發動) ' + player2.name + '獲得控骰卡：骰' + star.description;
-                        console.log(player2.name, '獲得控骰卡：骰', star.description);
+                        console.log(player2.name, '被動效果發動，獲得控骰卡：骰'+ star.description);
                     }
                     if (star.type == "buff"){
                         player2.buff.push(star);
                         card.innerHTML += '<br>(被動效果發動) ' + player2.name + '獲得永久效果卡：' + star.description;
-                        console.log(player2.name, '獲得永久效果卡：', star.description);
+                        console.log(player2.name, '被動效果發動，獲得永久效果卡：', star.description);
                     }
                 }
             }
@@ -343,7 +343,7 @@ async function get_buff(player){
                 if (star.type == "dice"){
                     player.dice.push(star.description);
                     card.innerHTML += '<br>' + player.name + '獲得控骰卡：骰' + star.description;
-                    console.log(player.name, '獲得控骰卡：骰', star.description);
+                    console.log(player.name, '獲得控骰卡：骰'+ star.description);
                 }
                 if (star.type == "buff"){
                     player.buff.push(star);
@@ -358,7 +358,7 @@ async function get_buff(player){
         var money = ques.money;
         if (have_buff(player, 1) == true) money = 0;
         card.innerHTML = '<br>' + '？卡效果：' + ques.description + '<br>' + '（嫁禍金額：' + money + '）';
-        console.log('？卡效果：' + ques.description);
+        console.log(player.name, '抽到？卡：', ques.description);
         quesData[quesData.length-1] = (quesData[quesData.length-1] + 1) % (quesData.length-1);
         var to_player = await transfer(player, ques);
         await use_ques(ques, to_player);
@@ -372,6 +372,7 @@ async function get_buff(player){
         output_player(player);
         var card = document.getElementById("card");
         card.innerHTML += '<br>(被動效果發動) ' + player.name + '獲得' + money + '元';
+        console.log(player.name, '被動效果發動，獲得', money, '元');
     }
     for (var j=0 ; j<playerData.length ; j++){
         if (player.name == playerData[j].name) continue;
@@ -383,6 +384,7 @@ async function get_buff(player){
             [player.money, playerData[j].money] = [player.money+money, playerData[j].money-money];
             var card = document.getElementById("card");
             card.innerHTML += '<br>(被動效果發動) ' + player.name + '搶走' + playerData[j].name + money + '元';
+            console.log(player.name, '被動效果發動，搶走', playerData[j].name, money, '元');
             output_player(player);
             output_player(playerData[j]);
         }
@@ -477,7 +479,8 @@ function score_of_path(player, point){
         }
         for (var i=0 ; i<playerData.length ; i++){
             if (player.name == playerData[i].name) continue;
-            if ((distance_to_terminal(playerData[i].x, playerData[i].y) < 10) && (have_buff(playerData[i], 3) == false) && (player.money >= 30)) score += 5000;
+            if ((distance_to_terminal(playerData[i].x, playerData[i].y) <= 10) && (have_buff(playerData[i], 3) == false) && (player.money >= 30)) score += 500;
+            if ((distance_to_terminal(playerData[i].x, playerData[i].y) <= 6) && (have_buff(playerData[i], 3) == false) && (player.money >= 30)) score += 5000;
         }
     }
     if (have_buff(player, 9) == true){
@@ -505,11 +508,11 @@ async function moveplayer(player, diceNumber){
     if (diceNumber <= 50){
         if (diceNumber > 0){ // roll
             card.innerHTML = '<br>' + player.name + '骰出了 ' + diceNumber;
-            console.log(player.name + '骰出了 ' + diceNumber);
+            console.log(player.name, '骰出了', diceNumber);
             if (have_buff(player, 7) == true){
                 diceNumber += 3;
                 card.innerHTML += '<br>(被動效果發動) 可以走'+ diceNumber + '步';
-                console.log('可以走', diceNumber, '步');
+                console.log(player.name, '被動效果發動，可以走', diceNumber, '步');
             }
         }else if (diceNumber < 0){ // card
             diceNumber = -diceNumber;
@@ -517,7 +520,7 @@ async function moveplayer(player, diceNumber){
             player.dice.splice(index, 1);
             await sleep(1000);
             card.innerHTML = '<br>' + player.name + '使用控骰卡：骰' + diceNumber;
-            console.log(player.name + '使用控骰卡：骰' + diceNumber);
+            console.log(player.name, '使用控骰卡：骰' + diceNumber);
             starData.push({type: "dice", description:diceNumber});
         }
         await sleep(1000);
@@ -525,7 +528,7 @@ async function moveplayer(player, diceNumber){
         if (player.person == false) global_path = find_path_AI(player, paths);
         else global_path = find_path_AI(player, paths);
         var path = global_path;
-        console.log(path[0].x, path[0].y, 'to', path[diceNumber].x, path[diceNumber].y);
+        console.log(player.name, '移動到', path[diceNumber].x, path[diceNumber].y);
         for (var i=1 ; i<=diceNumber ; i++){
             player.x = path[i].x;
             player.y = path[i].y;
@@ -538,12 +541,16 @@ async function moveplayer(player, diceNumber){
     if ((player.x == 9) && (player.y == 12)){
         var card = document.getElementById("card");
         card.innerHTML = '<br>' + '恭喜' + player.name + '勝出！';
-        console.log(player.name + '勝出！');
+        console.log(player.name, '勝出！');
         return;
     }else my_turn((player.id+1)%playerData.length);
 }
 
+var turncount=0;
+
 async function my_turn(i){
+    if (i == 0) turncount += 1;
+    if (i == 0) console.log('第', turncount, '輪');
     var button1 = document.getElementById("roll");
     //var button2 = document.getElementById("use_star");
     //var button3 = document.getElementById("door");
