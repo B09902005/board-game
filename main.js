@@ -266,7 +266,11 @@ function use_shield(player, ques){
 async function transfer(player, ques){
     await sleep(1000);
     var card = document.getElementById("card");
-    var player2 = throw_ques(player, ques);
+    global_toplayer = null;
+    if (player.person == false) global_toplayer = await throw_ques(player, ques);
+    else transfer_option(player, ques);
+    while (global_toplayer == null) await sleep(100);
+    var player2 = global_toplayer;
     var money = ques.money;
     if (have_buff(player, 1) == true) money = 0;
     if (player.money < money) player2 = player;
@@ -275,8 +279,13 @@ async function transfer(player, ques){
         console.log(player.name, '選擇嫁禍給', player2.name);
         player.money -= money;
         await sleep(1000);
-        var defend = use_shield(player2, ques);
-        if ((defend == true) && (have_buff(player, 2) == false) && ((player2.shield != 0) || (have_buff(player2, 3) == true))){
+        global_shield = null;
+        if (have_buff(player, 2) == true) global_shield = false;
+        else if ((player2.shield == 0) && (have_buff(player2, 3) == false)) global_shield = false;
+        else if (player2.person == false) global_shield = use_shield(player2, ques);
+        else shield_option(player2);
+        while (global_shield == null) await sleep(100);
+        if (global_shield == true){
             card.innerHTML += ('<br>' + player2.name + '使用嫁禍無效卡');
             console.log(player2.name, '使用嫁禍無效卡');
             if (have_buff(player2, 3) == false){
@@ -314,13 +323,55 @@ async function transfer(player, ques){
     return player2;
 }
 
+function shield_option(player){
+    var card = document.getElementById("card");
+    card.innerHTML += '<br>' + player.name + ' 是否使用嫁禍無效卡？<br>';
+    for (var i=0 ; i<2 ; i++){
+        var button = document.createElement("button");
+        if (i == 0) button.textContent = "是";
+        if (i == 1) button.textContent = "否";
+        button.className = "btnOption";
+        button.id = "use_shield" + i;
+        button.style.marginTop = (70*i+100) + 'px';
+        card.appendChild(button);
+    }
+}
+
+function transfer_option(player, ques){
+    var card = document.getElementById("card");
+    card.innerHTML += '<br>' + '請選擇要嫁禍給誰<br>';
+    var money = ques.money;
+    if (have_buff(player, 1) == true) money = 0;
+    var button = document.createElement("button");
+    button.className = "btnOption";
+    button.id = "toplayer" + player.id;
+    button.textContent = "不嫁禍";
+    button.style.backgroundColor = '#4CAF50';
+    button.style.marginTop = 30 + 'px';
+    button.dataset.index = 0;
+    card.appendChild(button);
+    
+    for (var i=0 ; i<playerData.length-1 ; i++){
+        var j = i;
+        if (j >= player.id) j = j + 1;
+        button = document.createElement("button");
+        button.textContent = playerData[j].name + " ($" + money + ")";
+        button.className = "btnOption";
+        button.id = "toplayer" + j;
+        button.dataset.index = money;
+        button.style.marginTop = (70*i+100) + 'px';
+        card.appendChild(button);
+    }
+}
+
 async function get_buff(player){
     var card = document.getElementById("card");
     if (tileData[player.y][player.x].class == "tile money"){
         var money = 30;
         if (have_buff(player, 6) == true) money = 60;
         player.money += money;
-        card.innerHTML = '<br>' + player.name + '獲得' + money + '元';
+        if (money == 30) card.innerHTML = '<br>' + player.name + '獲得' + money + '元';
+        if (money == 60) card.innerHTML = '<br>(被動效果發動) ' + player.name + '獲得' + money + '元';
         console.log(player.name, '獲得', money, '元');
     }
     if (tileData[player.y][player.x].class == "tile star"){
@@ -357,11 +408,12 @@ async function get_buff(player){
         var ques = quesData[quesData[quesData.length-1]];
         var money = ques.money;
         if (have_buff(player, 1) == true) money = 0;
-        card.innerHTML = '<br>' + '？卡效果：' + ques.description + '<br>' + '（嫁禍金額：' + money + '）';
+        card.innerHTML = '<br>' + '？卡效果：' + ques.description;
+        if (player.person == false) card.innerHTML += '<br>' + '（嫁禍金額：' + money + '）';
         console.log(player.name, '抽到？卡：', ques.description);
         quesData[quesData.length-1] = (quesData[quesData.length-1] + 1) % (quesData.length-1);
-        var to_player = await transfer(player, ques);
-        await use_ques(ques, to_player);
+        var player2 = await transfer(player, ques);
+        await use_ques(ques, player2);
     }
     output_player(player);
     if (have_buff(player, 5) == true){
@@ -459,7 +511,7 @@ function score_of_path(player, point){
     if (tileData[point.y][point.x].class == "tile money"){
         score += 50;
         if (have_buff(player, 6) == true) score += 50;
-        if (player.money >= 200) score += 100;
+        if (player.money >= 250) score += 50;
         if (player.money >= 350) score += 4000;
     }
     if (tileData[point.y][point.x].class == "tile star"){
@@ -518,15 +570,20 @@ async function moveplayer(player, diceNumber){
             diceNumber = -diceNumber;
             var index = player.dice.indexOf(diceNumber);
             player.dice.splice(index, 1);
-            await sleep(1000);
+            if (player.person == false) await sleep(1000);
             card.innerHTML = '<br>' + player.name + '使用控骰卡：骰' + diceNumber;
             console.log(player.name, '使用控骰卡：骰' + diceNumber);
             starData.push({type: "dice", description:diceNumber});
         }
-        await sleep(1000);
-        var paths = find_all_paths(player.x, player.y, diceNumber);
-        if (player.person == false) global_path = find_path_AI(player, paths);
-        else global_path = find_path_AI(player, paths);
+        if (player.person == false) await sleep(1000);
+        global_paths = find_all_paths(player.x, player.y, diceNumber);
+        global_path = [];
+        if (player.person == false) global_path = find_path_AI(player, global_paths);
+        else{
+            card.innerHTML += '<br>' + '請在地圖上點選想去的格子';
+            add_targets(global_paths);
+        }
+        while (global_path.length == 0) await sleep(100);
         var path = global_path;
         console.log(player.name, '移動到', path[diceNumber].x, path[diceNumber].y);
         for (var i=1 ; i<=diceNumber ; i++){
@@ -547,33 +604,36 @@ async function moveplayer(player, diceNumber){
 }
 
 var turncount=0;
+var who=0;
 
 async function my_turn(i){
+    who = i;
     if (i == 0) turncount += 1;
     if (i == 0) console.log('第', turncount, '輪');
     var button1 = document.getElementById("roll");
-    //var button2 = document.getElementById("use_star");
-    //var button3 = document.getElementById("door");
+    var button2 = document.getElementById("use_star");
+    var button3 = document.getElementById("door");
     if (playerData[i].person == false){ // AI
         button1.disabled = true;
-        //button2.disabled = true;
-        //button3.disabled = true;
-        button1.disabled = false;
+        button2.disabled = true;
+        button3.disabled = true;
         var card = document.getElementById("card");
-        card.innerHTML = '<br>輪到' + playerData[i].name + '，請按按鈕以繼續遊戲。';
-        global_dice = -1;
-        while (global_dice == -1) await sleep(100);
+        card.innerHTML = '<br>輪到' + playerData[i].name;
+        await sleep(1000);
         await pick_dice_AI(playerData[i]);
         await moveplayer(playerData[i], global_dice);
     }
     else{ // person
         button1.disabled = false;
-        //button2.disabled = false;
-        //button3.disabled = false;
+        button2.disabled = false;
+        button3.disabled = false;
         var card = document.getElementById("card");
         card.innerHTML = '<br>輪到' + playerData[i].name + '，請按按鈕移動。';
-        global_dice = -1;
-        while (global_dice == -1) await sleep(100);
+        global_dice = -999;
+        while (global_dice == -999) await sleep(100);
+        button1.disabled = true;
+        button2.disabled = true;
+        button3.disabled = true;
         await moveplayer(playerData[i], global_dice);
     }
 }

@@ -1,3 +1,20 @@
+function add_targets(paths){
+    for (var i=0 ; i<paths.length ; i++){
+        var target_icon = document.createElement("img");
+        var target_modal = document.getElementById("target_modal");
+        target_icon.className = "player_icon";
+        target_icon.id = "target_icon" + i;
+        target_icon.style.marginLeft = 40 * paths[i][paths[i].length-1].x + 35 + "px";
+        target_icon.style.marginTop = 40 * paths[i][paths[i].length-1].y + 5 + "px";
+        target_icon.style.width = 30 + "px";
+        target_icon.style.height = 30 + "px";
+        target_icon.style.opacity = 0.6;
+        target_icon.src = "images/tile/dest.png";
+        target_icon.dataset.index = i;
+        target_modal.appendChild(target_icon);
+    }
+}
+
 // 建立遊戲版上的各個格子
 function add_tiles(){
     var gameboard = document.getElementById("gameboard");
@@ -83,7 +100,7 @@ function init(){
                 {id:0, money: 30, description: "前往起點"},
                 {id:1, money: 30, description: "前往起點"},
                 {id:2, money: 30, description: "前往博物館"},
-                {id:3, money: 30, description: "前往動物園"},
+                {id:3, money: 30, description: "前往森林"},
                 {id:4, money: 30, description: "前往警察局"},
                 {id:5, money: 30, description: "前往銀行"},
                 {id:6, money: 30, description: "前往銀行"},
@@ -164,8 +181,11 @@ function init(){
     }
 }
 
-var global_dice = -1;
+var global_dice = -999;
 var global_path = [];
+var global_paths = [];
+var global_toplayer = null;
+var global_shield = null;
                                                                         
 var playerData = [
     { name: "玩家一", id: 0, money: 0, shield: 0, dice: [], buff:[], x: 0, y: 23 },
@@ -179,7 +199,7 @@ var starData = [];
 var placeData = [
     { margin_left: 40, margin_top: 890, text: "起點" },
     { margin_left: 200, margin_top: 890, text: "博物館" },
-    { margin_left: 40, margin_top: 770, text: "動物園" },
+    { margin_left: 70, margin_top: 770, text: "森林" },
     { margin_left: 440, margin_top: 890, text: "警察局" },
     { margin_left: 710, margin_top: 770, text: "銀行" },
     { margin_left: 80, margin_top: 370, text: "商業區" },
