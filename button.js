@@ -111,6 +111,9 @@ async function start_game(){
     }
     my_turn(0);
 }
+function rule(){
+    window.open('https://hackmd.io/@allen522019/HJZ-3kWc2', '遊戲規則');
+}
 
 function restart(){
     var temp = confirm('確定要重新開始遊戲？本局的遊戲資料將不會保存。');
